@@ -1,22 +1,17 @@
-# Logs
-*.log
-npm-debug.log*
 
-# Runtime data
-*.pid
-.tmp
-
-###############
+# OSX
+#
 .DS_Store
-node_modules
-dist
 
-##push server
-#/*
-#!/dist
-#!server.js
-#!/logs
-#!package.json
-#!process.json
-#*.log
-#*.pid
+# Android/IJ
+#
+.idea
+.gradle
+local.properties
+
+# node.js
+#
+node_modules/
+npm-debug.log
+
+.idea/workspace.xml
