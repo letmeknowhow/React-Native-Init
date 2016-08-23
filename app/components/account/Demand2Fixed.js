@@ -5,7 +5,7 @@
  *  Description: 活期账户查询
  */
 
-const MockData_1 = [
+const MOCKDATA_1 = [
   {id: 0, text: '当前账户', amount: '1234********6789', amountColor: 'black', clickable: false},
   {id: 1, text: '余额', amount: '123456', amountColor: 'black', clickable: false},
   {id: 2, text: '存期', amount: '六个月', amountColor: 'black', clickable: true},
@@ -75,7 +75,7 @@ export default class Demand2Fixed extends Component {
     return (
       <View style={styles.page}>
         <CommonHeader data={this.props.data} />
-        <AccountButtonList style={{marginBottom: 10}} buttons={MockData_1}/>
+        <AccountButtonList style={{marginBottom: 10}} buttons={MOCKDATA_1}/>
         <TouchableOpacity style={styles.searchButton}>
           <Text style={{color: '#FFF'}}>确定</Text>
         </TouchableOpacity>

@@ -306,8 +306,8 @@ class ModalBox extends React.Component {
       <View style={[styles.transparent, styles.absolute]} pointerEvents={'box-none'}>
         {backdrop}
         <Animated.View
-          onLayout={(e)=>this.onViewLayout(e)}
-          style={[styles.wrapper, {height: screen.height, width: screen.width}, this.props.style, {transform: [{translateY: this.state.position}, {translateX: offsetX}]} ]}
+          onLayout={(e) => this.onViewLayout(e)}
+          style={[styles.wrapper, {height: screen.height, width: screen.width}, this.props.style, {transform: [{translateY: this.state.position}, {translateX: offsetX}]}]}
           {...pan}>
           {this.props.children}
         </Animated.View>

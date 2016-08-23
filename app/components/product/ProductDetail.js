@@ -4,7 +4,7 @@
  *  Date: 16/4/1.
  *  Description:
  */
-const Mock_HTML = `
+const MOCK_HTML = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -88,19 +88,21 @@ export default class ProductDetail extends Component {
     this.state = {};
   }
 
-  onBridgeMessage(message){
+  onBridgeMessage(message) {
     const { webviewbridge } = this.refs;
 
     switch (message) {
-      case "hello from webview":
-        webviewbridge.sendToBridge("hello from react-native");
+      case 'hello from webview':
+        webviewbridge.sendToBridge('hello from react-native');
         break;
-      case "got the message inside webview":
-        console.log("we have got a message from webview! yeah");
+      case 'got the message inside webview':
+        console.log('we have got a message from webview! yeah');
         break;
-      case "getNativeInfo":
+      case 'getNativeInfo':
         webviewbridge.sendToBridge(this.props.data);
         break;
+      default:
+
     }
   }
 
@@ -110,11 +112,11 @@ export default class ProductDetail extends Component {
       <View style={[styles.page, {marginTop: Platform.OS === 'ios' ? 20 : 0}]}>
         <CommonHeader data={this.props.data} />
         <WebView
-          ref='webviewbridge'
+          ref="webviewbridge"
           automaticallyAdjustContentInsets={false}
           style={{flex: 1}}
           //source={{uri: 'http://www.baidu.com'}}
-          source={{html: Mock_HTML}}
+          source={{html: MOCK_HTML}}
           javaScriptEnabled={true}
           //startInLoadingState={true}
           //scalesPageToFit={true}

@@ -46,12 +46,12 @@ export default class ButtonList extends Component {
 
   renderButton(buttons, action, buttonType, renderFn) {
     return buttons.map((button) => {
-      if(renderFn) {
+      if (renderFn) {
         return renderFn(button);
       } else {
         return (
           <TouchableOpacity key={button.id} style={[styles.button, buttonType]}
-                            onPress={()=> {action && action({data: button.text})}}>
+                            onPress={() => { action({data: button.text}); } }>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               {button.uri && <Image style={styles.icon} source={button.uri}/>}
               <Text style={{fontSize: 16}}>{button.text}</Text>

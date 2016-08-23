@@ -4,21 +4,21 @@
  *  Date: 16/2/16.
  *  Description:
  */
-const MockData_1 = [
+const MOCKDATA_1 = [
   {id: 0, uri: require('../../assets/icons/mine/xxzx.png'), text: '登录密码修改'},
   {id: 1, uri: require('../../assets/icons/mine/cydz.png'), text: '限额设置'},
   {id: 2, uri: require('../../assets/icons/mine/cylk.png'), text: '用户名设置'}
 ];
-const MockData_2 = [
+const MOCKDATA_2 = [
   {id: 0, uri: require('../../assets/icons/mine/gywm.png'), text: '账号保护'},
   {id: 1, uri: require('../../assets/icons/mine/qb.png'), text: '预留信息设置'},
   {id: 2, uri: require('../../assets/icons/mine/sz.png'), text: '交易密码修改'}
 ];
-const MockData_3 = [
+const MOCKDATA_3 = [
   {id: 0, uri: require('../../assets/icons/mine/qb.png'), text: '手势密码'},
   {id: 1, uri: require('../../assets/icons/mine/sz.png'), text: '短信提醒管理'},
 ];
-const MockData_4 = [
+const MOCKDATA_4 = [
   {id: 0, uri: require('../../assets/icons/mine/sz.png'), text: '检查更新'},
 ];
 import React, { Component } from 'react';
@@ -121,24 +121,22 @@ export default class ConfigMenu extends Component {
         </View>
         <ButtonList style={{width: 210}}
                     buttonType={{height: 30, backgroundColor: 'transparent'}}
-                    buttons={MockData_1} />
+                    buttons={MOCKDATA_1} />
         <ButtonList style={{width: 210, marginTop: 10}}
                     buttonType={{height: 30, backgroundColor: 'transparent'}}
-                    buttons={MockData_2} />
+                    buttons={MOCKDATA_2} />
         <ButtonList style={{width: 210, marginTop: 10}}
                     buttonType={{height: 30, backgroundColor: 'transparent'}}
-                    buttons={MockData_3} />
+                    buttons={MOCKDATA_3} />
         <ButtonList style={{width: 210, marginTop: 10}}
-                    buttons={MockData_4}  renderButton={this.renderButton.bind(this)}/>
+                    buttons={MOCKDATA_4} renderButton={this.renderButton.bind(this)}/>
         <ModalBox style={[styles.modal]} swipeToClose={false} position={"center"} ref={"downloadBox"}>
           <View style={styles.message}>
             <Text>{this.state.syncMessage}</Text>
             {this.state.progress && (
               <Text>{this.state.progress.receivedBytes} / {this.state.progress.totalBytes}</Text>)}
           </View>
-          <View style={{width: window.width / 3, backgroundColor: 'transparent'}}>
-
-          </View>
+          <View style={{width: window.width / 3, backgroundColor: 'transparent'}} />
         </ModalBox>
       </View>
     );

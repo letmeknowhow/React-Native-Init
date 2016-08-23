@@ -59,7 +59,7 @@ export default class Payment extends Component {
   // 渲染
   render() {
     return (
-      <View  style={[styles.page, {marginTop: Platform.OS === 'ios' ? 20 : 0}]}>
+      <View style={[styles.page, {marginTop: Platform.OS === 'ios' ? 20 : 0}]}>
         <CommonHeader data={this.props.data} />
         <View style={[styles.container, {borderTopRightRadius: 5, borderTopLeftRadius: 5}]}>
           <Text style={styles.label}>缴费类型:</Text>

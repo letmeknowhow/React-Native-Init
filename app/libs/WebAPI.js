@@ -1,13 +1,12 @@
 /**
  *  Class: WebAPI
  *  Author: Niu Xiaoyu
- *  Date: 16/2/16.
+ *  Date: 16/7/9.
  *  Description: 处理请求
  */
 
 //'use strict';
 require('regenerator/runtime');
-import _ from 'lodash';
 import config from '../config/WebApiConfig';
 import appAuthToken from './AppAuthToken';
 
@@ -20,36 +19,18 @@ class WebAPI {
   }
 
   /** 网络异常处理*/
-  catchHandle(ex) {
-    Alert.alert('提示', '网络异常',
-      [
-        {text: '确定', onPress: () => { webApi.actions.routes.signIn()(); } }
-      ]
-    );
-    throw ex;
-  };
-
-  // 从获取本地token
-  async _getSessionToken() {
-    try {
-      let self = this;
-      return appAuthToken.getSessionToken().then((token) => {
-        self._sessionToken =
-          _.isUndefined(token) ? null : token;
-      });
-    } catch (e) {
-      throw e;
-    }
+  catchHandle(opts) {
+    console.log(`请求异常: ${opts.url}`);
   }
 
   // fetch 的核心方法
-  async _fetch(opts) {
-    opts = _.extend({
+  async innerFetch(opts1) {
+    let opts = Object.assign({
       method: 'GET',
       url: null,
       body: null,
       callback: null
-    }, opts);
+    }, opts1);
     let reqOpts = {
       method: opts.method,
       headers: {
@@ -58,11 +39,7 @@ class WebAPI {
         'clientInfo': 'app'
       }
     };
-    //await this._getSessionToken();
-    if (this._sessionToken) {
-      reqOpts.headers.access_token = this._sessionToken.access_token;
-      reqOpts.headers.nhic = this._sessionToken.nhic;
-    }
+
     if (opts.method === 'POST' || opts.method === 'PUT') {
       reqOpts.headers.Accept = 'application/json';
       reqOpts.headers['Content-Type'] = 'application/json';
@@ -77,44 +54,52 @@ let responseResolve = async (response) => {
   let json = {};
   let backJson = {
     json: {},
-    response
+    success: false,
+    errorMessage: ''
   };
-  if (response.status === 200 || response.status === 201) {
-    try{
-      return await response.json().then((responseJson) => {
-        json = responseJson.response;
-        backJson.json = json;
-        return backJson;
+  if (response.ok) {
+    try {
+      backJson = await response.json().then((responseJson) => {
+        let res = Object.assign({}, backJson);
+        if (responseJson.success) {
+          res.success = true;
+          if (typeof responseJson.data === 'string') {
+            json = JSON.parse(responseJson.data);
+          } else {
+            json = responseJson.data;
+          }
+        } else {
+          res.errorMessage = responseJson.message;
+        }
+        res.json = json;
+        return res;
       });
     } catch (ex) {
-      console.error('尝试解析json时失败:  WebApi.js');
+      console.error(`尝试解析json时失败: ${response.url}`);
     }
-
   }
   if (response.status === 403 || response.status === 401) {
     try {
-      // 清除本地token
-      //webApi.actions.deleteSessionToken();
+      console.log(response.status);
     }
     catch (ex) {
-      console.error('清除本地token失败:  WebApi.js');
+      console.error(`清除本地token失败: ${response.url}`);
     }
   }
-  if (response.status === 500) {
-  }
-
+  return backJson;
 };
 
 
 let postRequest = (opts) => {
   return async function (data) {
     try {
-      return await this._fetch({
+      return await this.innerFetch({
         method: 'POST',
         url: opts.url,
         body: data,
       }).then(responseResolve);
     } catch (e) { this.catchHandle(e); }
+    return null;
   };
 };
 let getRequest = (opts) => {
@@ -123,17 +108,16 @@ let getRequest = (opts) => {
     for (let property in data) {
       let encodeKey = encodeURIComponent(property);
       let encdeeValue = encodeURIComponent(data[property]);
-      formBody.push(encodeKey + '=' + encdeeValue);
+      formBody.push(`${encodeKey}=${encdeeValue}`);
     }
     formBody = formBody.join('&');
     try {
-      return await this._fetch({
+      return await this.innerFetch({
         method: 'GET',
-        url: opts.url + '?' + formBody
+        url: `${opts.url}?${formBody}`
       }).then(responseResolve);
     } catch (e) {
-
-      this.catchHandle();
+      this.catchHandle(opts);
       throw e;
     }
   };
@@ -141,13 +125,12 @@ let getRequest = (opts) => {
 let putRequest = (opts) => {
   return async function (id, data) {
     try {
-      return await this._fetch({
+      return await this.innerFetch({
         method: 'PUT',
-        url: opts.url + '/' + id,
+        url: `${opts.url}/${id}`,
         body: data
       }).then(responseResolve);
     } catch (e) {
-
       this.catchHandle();
       throw e;
     }
@@ -156,28 +139,26 @@ let putRequest = (opts) => {
 let deleteRequest = (opts) => {
   return async function (id) {
     try {
-      return await this._fetch({
+      return await this.innerFetch({
         method: 'DELETE',
-        url: opts.url + '/' + id
+        url: `${opts.url}/${id}`
       }).then(responseResolve);
     } catch (e) {
-
       this.catchHandle();
       throw e;
     }
   };
 };
-// 下面的几种方法 应该 考虑 用正则的方式 来匹配
+
 let putStatusRequest = (opts) => {
   return async function (id, data) {
     try {
-      return await this._fetch({
+      return await this.innerFetch({
         method: 'PUT',
-        url: opts.url + '/' + id + '/status',
+        url: `${opts.url}/${id}/status`,
         body: data
       }).then(responseResolve);
     } catch (e) {
-
       this.catchHandle();
       throw e;
     }
@@ -186,13 +167,12 @@ let putStatusRequest = (opts) => {
 let putUserRequest = (opts) => {
   return async function (data) {
     try {
-      return await this._fetch({
+      return await this.innerFetch({
         method: 'PUT',
         url: opts.url,
         body: data
       }).then(responseResolve);
     } catch (e) {
-
       this.catchHandle();
       throw e;
     }
@@ -203,17 +183,16 @@ let getIdRequest = (opts) => {
     let formBody = [];
     for (let property in data) {
       let encodeKey = encodeURIComponent(property);
-      let encdeeValue = encodeURIComponent(data[property]);
-      formBody.push(encodeKey + '=' + encdeeValue);
+      let encodeValue = encodeURIComponent(data[property]);
+      formBody.push(`${encodeKey}=${encodeValue}`);
     }
     formBody = formBody.join('&');
     try {
-      return await this._fetch({
+      return await this.innerFetch({
         method: 'GET',
-        url: opts.url + '/' + id + '?' + formBody
+        url: `${opts.url}/${id}?${formBody}`
       }).then(responseResolve);
     } catch (e) {
-
       this.catchHandle();
       throw e;
     }
@@ -222,13 +201,12 @@ let getIdRequest = (opts) => {
 let putTwoRequest = (opts) => {
   return async function (url1, url2, data) {
     try {
-      return await this._fetch({
+      return await this.innerFetch({
         method: 'PUT',
-        url: opts.url + '/' + url1 + '/' + url2,
+        url: `${opts.url}/${url1}/${url2}`,
         body: data
       }).then(responseResolve);
     } catch (e) {
-
       this.catchHandle();
       throw e;
     }
@@ -253,5 +231,5 @@ for (let i = 0; i < config.api.length; i++) {
     WebAPI.prototype[config.api[i].name] = putTwoRequest(config.api[i]);
   }
 }
-let webApi = new WebAPI();
+const webApi = new WebAPI();
 export default webApi;

@@ -88,7 +88,7 @@ class Grid extends Component {
       });
     }
 
-    return data.map((item,key) => {
+    return data.map((item, key) => {
       return (
         <View key={key} style={cellStyle}>
           {item}

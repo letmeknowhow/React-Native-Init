@@ -113,4 +113,4 @@ export default {
       desc: '修改密码'
     }
   ]
-}
+};

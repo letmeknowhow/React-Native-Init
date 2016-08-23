@@ -5,10 +5,10 @@
  *  Description: 活期账户查询
  */
 
-const MockData_1 = [
+const MOCKDATA_1 = [
   {id: 0, text: '当前账号', amount: '1234********5678', amountColor: 'black', clickable: false},
 ];
-const MockData_2 = [
+const MOCKDATA_2 = [
   {id: 0, text: '活期结算户明细:', amount: ' ', amountColor: 'black', clickable: false},
   {id: 1, text: '币种', amount: '人民币', amountColor: 'black', clickable: false},
   {id: 2, text: '余额', amount: '88888.88 元', amountColor: 'black', clickable: false},
@@ -68,9 +68,9 @@ export default class DemandDepositSearch extends Component {
   render() {
     return (
       <View style={styles.page}>
-        <CommonHeader data='活期结算户' />
-        <AccountButtonList style={{marginBottom: 10}} buttons={MockData_1}/>
-        <AccountButtonList style={{marginBottom: 10}} buttons={MockData_2}/>
+        <CommonHeader data="活期结算户" />
+        <AccountButtonList style={{marginBottom: 10}} buttons={MOCKDATA_1}/>
+        <AccountButtonList style={{marginBottom: 10}} buttons={MOCKDATA_2}/>
         <TouchableOpacity style={styles.searchButton}>
           <Text style={{color: '#FFF'}}>交易查询</Text>
         </TouchableOpacity>

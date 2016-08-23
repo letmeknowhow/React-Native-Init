@@ -5,19 +5,19 @@
  *  Description: 活期账户查询
  */
 
-const MockData_1 = [
+const MOCKDATA_1 = [
   {id: 0, text: '户名:', amount: '张三', amountColor: 'black', clickable: false},
   {id: 1, text: '账号', amount: '8888 8888 8888 8888', amountColor: 'black', clickable: false},
   {id: 2, text: '银行', amount: '**银行', amountColor: 'black', clickable: true}
 ];
 
-const MockData_2 = [
+const MOCKDATA_2 = [
   {id: 0, text: '转出账户', amount: '6666 8888 8888 8888', amountColor: 'black', clickable: false},
   {id: 1, text: '余额', amount: '12345', amountColor: 'black', clickable: false},
   {id: 2, text: '转出金额', amount: '123', amountColor: 'black', clickable: false}
 ];
 
-const MockData_3 = [
+const MOCKDATA_3 = [
   {id: 0, text: '短信通知:', amount: '138 8888 8888', amountColor: 'black', clickable: false},
   {id: 1, text: '转账附言', amount: '转账', amountColor: 'black', clickable: false},
 ];
@@ -83,9 +83,9 @@ export default class MoneyTransfer extends Component {
     return (
       <View style={styles.page}>
         <CommonHeader data={this.props.data} />
-        <AccountButtonList style={{marginBottom: 10}} buttons={MockData_1}/>
-        <AccountButtonList style={{marginBottom: 10}} buttons={MockData_2}/>
-        <AccountButtonList style={{marginBottom: 10}} buttons={MockData_3}/>
+        <AccountButtonList style={{marginBottom: 10}} buttons={MOCKDATA_1}/>
+        <AccountButtonList style={{marginBottom: 10}} buttons={MOCKDATA_2}/>
+        <AccountButtonList style={{marginBottom: 10}} buttons={MOCKDATA_3}/>
         <TouchableOpacity style={styles.searchButton}>
           <Text style={{color: '#FFF'}}>下一步</Text>
         </TouchableOpacity>

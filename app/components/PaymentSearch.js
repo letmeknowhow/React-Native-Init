@@ -75,19 +75,19 @@ export default class PaymentSearch extends Component {
       };
     }
 
-  render(){
+  render() {
     return (
-      <View  style={[styles.page, {marginTop: Platform.OS === 'ios' ? 20 : 0}]}>
+      <View style={[styles.page, {marginTop: Platform.OS === 'ios' ? 20 : 0}]}>
         <CommonHeader data={this.props.data} />
         <View style={[styles.container, {borderTopRightRadius: 5, borderTopLeftRadius: 5}]}>
           <Text style={styles.label}>缴费类型:</Text>
-          <TouchableOpacity style={[styles.dataInput, {height: 29, justifyContent:'center'}]} onPress={this._onPressHandle.bind(this)}>
+          <TouchableOpacity style={[styles.dataInput, {height: 29, justifyContent: 'center'}]} onPress={this._onPressHandle.bind(this)}>
             <Text>{this.state.payType + ' - ' + this.state.agent}</Text>
           </TouchableOpacity>
         </View>
         <View style={[styles.container, {borderBottomRightRadius: 5, borderBottomLeftRadius: 5, borderTopWidth: 0}]}>
           <Text style={styles.label}>用户编号:</Text>
-          <TextInput style={[styles.dataInput, {fontSize: 14}]} placeholder='请输入用户编号' />
+          <TextInput style={[styles.dataInput, {fontSize: 14}]} placeholder="请输入用户编号" />
         </View>
         <TouchableOpacity style={styles.searchButton}>
           <Text style={{color: '#FFF'}}>查询</Text>
@@ -100,17 +100,17 @@ export default class PaymentSearch extends Component {
           pickerData={createMockData()}
           selectedValue={['水费', '焦作水务']}
           onPickerDone={(pickedValue) => {
-						this.setState({
+            this.setState({
               payType: pickedValue[0],
               agent: pickedValue[1]
             });
-					}}
+          }}
         />
       </View>
     );
   }
 
-  _onPressHandle(){
+  _onPressHandle() {
     this.picker.toggle();
   }
 }

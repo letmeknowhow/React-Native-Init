@@ -1,1 +1,3 @@
 node_modules
+app/baseComponents/react-native-page-swiper
+app/baseComponents/GridView.js

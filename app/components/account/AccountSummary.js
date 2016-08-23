@@ -5,16 +5,16 @@
  *  Description: 账户总览
  */
 
-const MockData_1 = [
+const MOCKDATA_1 = [
   {id: 0, text: '总资产(元)', amount: '888888.88', amountColor: '#399CE8', clickable: false},
   {id: 1, text: '总负债(元)', amount: '8888.88', amountColor: 'red', clickable: false}
 ];
-const MockData_2 = [
+const MOCKDATA_2 = [
   {id: 0, text: '储蓄账户号', amount: '1234 **** **** 5678', amountColor: 'black', clickable: false},
   {id: 1, text: '活期结算户', amount: '888888.88', amountColor: '#399CE8', clickable: true},
   {id: 2, text: '定期结算户', amount: '666666.66', amountColor: '#399CE8', clickable: true}
 ];
-const MockData_3 = [
+const MOCKDATA_3 = [
   {id: 0, text: '信用卡', amount: '个人消费账户', amountColor: 'black', clickable: false},
   {id: 1, text: '可用额度', amount: '12345.67', amountColor: '#399CE8', clickable: true},
   {id: 2, text: '本期剩余应还人民币(元)', amount: '666.77', amountColor: 'red', clickable: true}
@@ -75,9 +75,9 @@ export default class Container extends Component {
     return (
       <View style={styles.page}>
         <CommonHeader data={this.props.data} />
-        <AccountButtonList style={{marginBottom: 5}} buttons={MockData_1}/>
+        <AccountButtonList style={{marginBottom: 5}} buttons={MOCKDATA_1}/>
         <View style={[styles.debit]}>
-          <AccountButtonList buttons={MockData_2}/>
+          <AccountButtonList buttons={MOCKDATA_2}/>
           <View style={styles.operationContainer}>
             <TouchableOpacity style={styles.operationButton}>
               <Text style={styles.operationText}>转账汇款</Text>
@@ -91,7 +91,7 @@ export default class Container extends Component {
           </View>
         </View>
         <View style={[styles.debit, {backgroundColor: 'red'}]}>
-          <AccountButtonList buttons={MockData_3}/>
+          <AccountButtonList buttons={MOCKDATA_3}/>
           <View style={styles.operationContainer}>
             <TouchableOpacity style={styles.operationButton}>
               <Text style={styles.operationText}>快速还款</Text>

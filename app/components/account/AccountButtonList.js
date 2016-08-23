@@ -45,7 +45,7 @@ export default class AccountButtonList extends Component {
 
   renderButton(buttons, action) {
     return buttons.map((button) => {
-      if(button.clickable) {
+      if (button.clickable) {
         return (
           <TouchableOpacity key={button.id} style={styles.button} activeOpacity={0.8}
                 onPress={this.setButtonAction(button.text)}>
@@ -53,7 +53,7 @@ export default class AccountButtonList extends Component {
               <Text style={styles.font}>{button.text}</Text>
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={[styles.font,{color: button.amountColor}]}>{this.formatMoney(button.amount)}</Text>
+              <Text style={[styles.font, {color: button.amountColor}]}>{this.formatMoney(button.amount)}</Text>
               <Text>{'  >'}</Text>
             </View>
           </TouchableOpacity>
@@ -65,7 +65,7 @@ export default class AccountButtonList extends Component {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={styles.font}>{button.text}</Text>
             </View>
-            <Text style={[styles.font,{color: button.amountColor}]}>{this.formatMoney(button.amount)}</Text>
+            <Text style={[styles.font, {color: button.amountColor}]}>{this.formatMoney(button.amount)}</Text>
           </View>
         );
       }
@@ -74,7 +74,7 @@ export default class AccountButtonList extends Component {
 
   setButtonAction(text) {
     let action;
-    switch (text){
+    switch (text) {
       case '活期结算户':
         action = Actions.demandDepositSearch;
         break;
@@ -87,15 +87,18 @@ export default class AccountButtonList extends Component {
   }
 
   formatMoney(money) {
-    if (/[^0-9\.]/.test(money)) return money;
-    money = money.replace(/^(\d*)$/, "$1.");
-    money = (money + "00").replace(/(\d*\.\d\d)\d*/, "$1");
-    money = money.replace(".", ",");
-    var re = /(\d)(\d{3},)/;
-    while (re.test(money)) {
-      money = money.replace(re, "$1,$2");
+    if (/[^0-9\.]/.test(money)) {
+      return money;
+    } else {
+      let r = money.replace(/^(\d*)$/, '$1.');
+      r = (r + '00').replace(/(\d*\.\d\d)\d*/, '$1');
+      r = r.replace('.', ',');
+      let re = /(\d)(\d{3},)/;
+      while (re.test(r)) {
+        r = r.replace(re, '$1,$2');
+      }
+      r = r.replace(/,(\d\d)$/, '.$1');
+      return '' + r.replace(/^\./, '0.');
     }
-    money = money.replace(/,(\d\d)$/, ".$1");
-    return '' + money.replace(/^\./, "0.");
   }
 }
