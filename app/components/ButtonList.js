@@ -51,7 +51,7 @@ export default class ButtonList extends Component {
       } else {
         return (
           <TouchableOpacity key={button.id} style={[styles.button, buttonType]}
-                            onPress={() => { action({data: button.text}); } }>
+                            onPress={() => { if (action) action({data: button.text}); } }>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               {button.uri && <Image style={styles.icon} source={button.uri}/>}
               <Text style={{fontSize: 16}}>{button.text}</Text>

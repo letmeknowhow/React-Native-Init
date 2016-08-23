@@ -85,7 +85,6 @@ export default class Home extends Component {
   componentDidMount() {
     //const homeStore = this.props.store.home;
     this.store.banner.getSource();
-    this.store.region1.getSource();
     this.store.region2.getSource();
   }
 
@@ -188,7 +187,7 @@ export default class Home extends Component {
       return (
         <TouchableOpacity key={item.id} onPress={() => Actions.productDetail({data: item.title, url: item.url})}
                           style={{height: 80, width: deviceWidth - 10, flexDirection: 'row', marginVertical: 3}}>
-          <Image style={{width: 80, height: 80}} source={item.uri}>
+          <Image style={{width: 80, height: 80}} source={{uri: item.uri}}>
             <Text style={[styles.nestedText2, bgColor]}>{item.category}</Text>
           </Image>
           <View style={{flex: 1, marginHorizontal: 10}}>
