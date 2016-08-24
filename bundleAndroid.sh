@@ -9,4 +9,4 @@ react-native bundle \
 --assets-dest ./release/android \
 --dev false
 
-code-push release ctsapp-android  ./release/android  1.0.0
+code-push release-react ctsapp-android android

@@ -25,6 +25,8 @@ import React, { Component } from 'react';
 
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
 
+import codePush from 'react-native-code-push';
+
 import ButtonList from '../components/ButtonList';
 import ModalBox from '../baseComponents/ModalBox';
 const Actions = require('react-native-router-flux').Actions;
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class ConfigMenu extends Component {
+class ConfigMenu extends Component {
   // 构造
     constructor(props) {
       super(props);
@@ -167,7 +169,76 @@ export default class ConfigMenu extends Component {
   }
 
   check4Update() {
+    let self = this;
+    codePush.sync(
+      {
+        updateDialog: {
+          title: '升级提醒',
+          optionalUpdateMessage: '有一个可用的更新 是否需要安装?',
+          optionalInstallButtonLabel: '马上更新',
+          optionalIgnoreButtonLabel: '暂不更新'
+        },
+        installMode: codePush.InstallMode.IMMEDIATE,
+      },
+      (syncStatus) => {
+        switch (syncStatus) {
+          case codePush.SyncStatus.CHECKING_FOR_UPDATE:
+            self.setState({
+              syncMessage: '正在检查更新.'
+            });
+            break;
+          case codePush.SyncStatus.DOWNLOADING_PACKAGE:
+            self.setState({
+              syncMessage: '正在下载.'
+            });
+            this.refs.downloadBox.open();
+            break;
+          case codePush.SyncStatus.AWAITING_USER_ACTION:
+            self.setState({
+              syncMessage: 'Awaiting user action.'
+            });
+            break;
+          case codePush.SyncStatus.INSTALLING_UPDATE:
+            self.setState({
+              syncMessage: '正在安装.'
+            });
+            this.refs.downloadBox.close();
+            break;
+          case codePush.SyncStatus.UP_TO_DATE:
+            self.setState({
+              syncMessage: '更新版本号到最新',
+              progress: false
+            });
+            break;
+          case codePush.SyncStatus.UPDATE_IGNORED:
+            self.setState({
+              syncMessage: 'Update cancelled by user.',
+              progress: false
+            });
+            break;
+          case codePush.SyncStatus.UPDATE_INSTALLED:
+            self.setState({
+              syncMessage: '更新已经安装,下次重启后应用更新内容',
+              progress: false
+            });
+            break;
+          case codePush.SyncStatus.UNKNOWN_ERROR:
+            self.setState({
+              syncMessage: '一个未知错误',
+              progress: false
+            });
+            break;
+          default:
 
-
+        }
+      },
+      (progress) => {
+        self.setState({
+          progress
+        });
+      }
+    );
   }
 }
+
+export default ConfigMenu;
