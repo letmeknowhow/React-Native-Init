@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Scene, Router, TabBar, Modal, Schema, Actions} from 'react-native-mobx';
 import { View, Navigator, Text, StyleSheet, Platform, Image, Alert, BackAndroid } from 'react-native';
 
+import codePush from 'react-native-code-push';
+
 import ModalBox from '../baseComponents/ModalBox';
 //model
 import CTSAppStore from '../model';
@@ -93,7 +95,7 @@ class TabIcon extends React.Component {
   }
 }
 
-export default class Application extends Component {
+class Application extends Component {
 
   constructor(props) {
     super(props);
@@ -148,3 +150,5 @@ export default class Application extends Component {
     );
   }
 }
+
+export default codePush(Application);

@@ -1,3 +1,4 @@
 <resources>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">mgpQbqZBKNqyOz6RN1DnCrEF-Lc8V1PKFFtOx</string>
     <string name="app_name">CTSApp</string>
 </resources>

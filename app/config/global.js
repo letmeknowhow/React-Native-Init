@@ -7,7 +7,7 @@
   
 const global = {
   /** webApi 域名前辍*/
-  webApiURL: 'http://localhost:3001',
+  webApiURL: 'http://127.0.0.1:3001',
   /** 图片地址前缀 **/
   imgBaseURL: 'http:/192.168.0.9:8090',
   /** 配置token失效时间 以天为单位**/

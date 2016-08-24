@@ -19,7 +19,7 @@ class BannerStore {
         this.bannerSource = data.json || [];
       })
       .catch((err) => {
-        //
+        console.log(err);
       });
   }
 }

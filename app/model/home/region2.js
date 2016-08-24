@@ -19,7 +19,7 @@ class Region2Store {
         this.region2Source = data.json || [];
       })
       .catch((err) => {
-        //
+        console.log(err);
       });
   }
 }
