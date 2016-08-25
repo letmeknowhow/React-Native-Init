@@ -93,7 +93,7 @@ export default class Home extends Component {
     const store = this.props.store;
     return (
         <View style={[styles.page]}>
-          <SceneHeader sceneStore={store.sidemenu} />
+          <SceneHeader sceneStore={store.sidemenu} title="首页" />
           <ScrollView
             scrollsToTop={true}
             showsVerticalScrollIndicator={false}

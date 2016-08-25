@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import {Scene, Router, TabBar, Schema, Actions} from 'react-native-mobx';
-import { Navigator, StyleSheet, Platform, Image, Alert, BackAndroid, Dimensions } from 'react-native';
-import { Container, Header, Title, Content, Text, Button, Icon, List, ListItem, View } from 'native-base';
+import { View, Navigator, StyleSheet, Platform, Image, Alert, BackAndroid, Dimensions, Text } from 'react-native';
 
 import codePush from 'react-native-code-push';
 
 import Modal from 'react-native-modalbox';
-import theme from '../themes/base-theme';
 import * as Progress from 'react-native-progress';
 //model
 import CTSAppStore from '../model';
@@ -154,16 +152,15 @@ class Application extends Component {
   render() {
     if (this.state.showDownloadingModal) {
       return (
-        <Container theme={theme} style={{backgroundColor: theme.defaultBackgroundColor}}>
-          <Content style={styles.container}>
+          <View style={{flex: 1}}>
             <Modal style={[styles.modal, styles.modal2]} backdrop={false} ref={"modal"} swipeToClose={false}>
               <View style={{flex: 1, alignSelf: 'stretch', justifyContent: 'center', padding: 20}}>
                 {this.state.showInstalling ?
-                  <Text style={{color: theme.brandPrimary, textAlign: 'center', marginBottom: 15, fontSize: 15 }}>
+                  <Text style={{textAlign: 'center', marginBottom: 15, fontSize: 15 }}>
                     正在安装更新包...
                   </Text> :
                   <View style={{flex: 1, alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center', padding: 20}}>
-                    <Text style={{color: theme.brandPrimary, textAlign: 'center', marginBottom: 15, fontSize: 15 }}>下载更新包...</Text>
+                    <Text style={{textAlign: 'center', marginBottom: 15, fontSize: 15 }}>下载更新包...</Text>
                     <Progress.Circle
                       style={styles.progress}
                       size={80}
@@ -174,9 +171,7 @@ class Application extends Component {
                 }
               </View>
             </Modal>
-          </Content>
-        </Container>
-
+          </View>
       );
     } else {
       return (
