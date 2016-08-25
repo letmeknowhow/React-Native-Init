@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import {Scene, Router, TabBar, Modal, Schema, Actions} from 'react-native-mobx';
-import { View, Navigator, Text, StyleSheet, Platform, Image, Alert, BackAndroid } from 'react-native';
+import {Scene, Router, TabBar, Schema, Actions} from 'react-native-mobx';
+import { Navigator, StyleSheet, Platform, Image, Alert, BackAndroid, Dimensions } from 'react-native';
+import { Container, Header, Title, Content, Text, Button, Icon, List, ListItem, View } from 'native-base';
 
 import codePush from 'react-native-code-push';
 
-import ModalBox from '../baseComponents/ModalBox';
+import Modal from 'react-native-modalbox';
+import theme from '../themes/base-theme';
+import * as Progress from 'react-native-progress';
 //model
 import CTSAppStore from '../model';
+
 
 //侧边菜单
 import Drawer from './Drawer';
@@ -31,23 +35,29 @@ import Demand2Fixed from '../components/account/Demand2Fixed';
 import Payment from '../components/Payment';
 import PaymentSearch from '../components/PaymentSearch';
 
+const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-  modal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 300,
-    height: 100,
-    borderRadius: 4,
-    shadowColor: 'black',
-    shadowOffset: {width: 5, height: 5},
-    marginBottom: 0,
-  },
   tabBarStyle: {
     backgroundColor: '#eee',
   },
   tabBarSelectedItemStyle: {
     backgroundColor: '#ddd',
   },
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modal1: {
+    height: 300
+  },
+  modal2: {
+    height,
+    position: 'relative',
+    justifyContent: 'center',
+  },
+  progress: {
+    margin: 10
+  }
 });
 const TAB_TITLE_HOME = '首页';
 const TAB_TITLE_FINANCIAL = '理财';
@@ -101,12 +111,13 @@ class Application extends Component {
     super(props);
     // 初始状态
     this.state = {
-      progress: false,
+      showDownloadingModal: false,
+      showInstalling: false,
+      downloadProgress: 0
     };
   }
 
-  componentWillMount() {
-    let self = this;
+  componentDidMount() {
     codePush.sync(
       {
         updateDialog: {
@@ -115,112 +126,110 @@ class Application extends Component {
           optionalInstallButtonLabel: '马上更新',
           optionalIgnoreButtonLabel: '暂不更新'
         },
-        installMode: codePush.InstallMode.IMMEDIATE,
+        installMode: codePush.InstallMode.IMMEDIATE
       },
-      (syncStatus) => {
-        switch (syncStatus) {
-          case codePush.SyncStatus.CHECKING_FOR_UPDATE:
-            self.setState({
-              syncMessage: '正在检查更新.'
-            });
-            break;
+      (status) => {
+        switch (status) {
           case codePush.SyncStatus.DOWNLOADING_PACKAGE:
-            self.setState({
-              syncMessage: '正在下载.'
-            });
-            this.refs.downloadBox.open();
-            break;
-          case codePush.SyncStatus.AWAITING_USER_ACTION:
-            self.setState({
-              syncMessage: 'Awaiting user action.'
-            });
+            this.setState({showDownloadingModal: true});
+            this.refs.modal.open();
             break;
           case codePush.SyncStatus.INSTALLING_UPDATE:
-            self.setState({
-              syncMessage: '正在安装.'
-            });
-            this.refs.downloadBox.close();
-            break;
-          case codePush.SyncStatus.UP_TO_DATE:
-            self.setState({
-              syncMessage: '更新版本号到最新',
-              progress: false
-            });
-            break;
-          case codePush.SyncStatus.UPDATE_IGNORED:
-            self.setState({
-              syncMessage: 'Update cancelled by user.',
-              progress: false
-            });
+            this.setState({showInstalling: true});
             break;
           case codePush.SyncStatus.UPDATE_INSTALLED:
-            self.setState({
-              syncMessage: '更新已经安装,下次重启后应用更新内容',
-              progress: false
-            });
-            break;
-          case codePush.SyncStatus.UNKNOWN_ERROR:
-            self.setState({
-              syncMessage: '一个未知错误',
-              progress: false
-            });
+            this.refs.modal.close();
+            this.setState({showDownloadingModal: false});
             break;
           default:
-
+            break;
         }
       },
-      (progress) => {
-        self.setState({
-          progress
-        });
+      ({ receivedBytes, totalBytes, }) => {
+        this.setState({downloadProgress: receivedBytes / totalBytes * 100});
       }
     );
   }
 
   render() {
+    if (this.state.showDownloadingModal) {
+      return (
+        <Container theme={theme} style={{backgroundColor: theme.defaultBackgroundColor}}>
+          <Content style={styles.container}>
+            <Modal style={[styles.modal, styles.modal2]} backdrop={false} ref={"modal"} swipeToClose={false}>
+              <View style={{flex: 1, alignSelf: 'stretch', justifyContent: 'center', padding: 20}}>
+                {this.state.showInstalling ?
+                  <Text style={{color: theme.brandPrimary, textAlign: 'center', marginBottom: 15, fontSize: 15 }}>
+                    正在安装更新包...
+                  </Text> :
+                  <View style={{flex: 1, alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center', padding: 20}}>
+                    <Text style={{color: theme.brandPrimary, textAlign: 'center', marginBottom: 15, fontSize: 15 }}>下载更新包...</Text>
+                    <Progress.Circle
+                      style={styles.progress}
+                      size={80}
+                      showsText={true}
+                      progress={parseInt(this.state.downloadProgress, 10) / 100}
+                    />
+                  </View>
+                }
+              </View>
+            </Modal>
+          </Content>
+        </Container>
 
-    return (
-      <View style={{flex: 1}}>
-        <Router hideNavBar={true} store={CTSAppStore} sceneStyle={{backgroundColor: '#F7F7F7'}}>
-          <Scene key="root" hideNavBar={true}>
-            <Scene key="productDetail" component={ProductDetail}/>
-            <Scene key="accountSummary" component={AccountSummary} title="账户查询"/>
-            <Scene key="demandDepositSearch" component={DemandDepositSearch}/>
-            <Scene key="fixedDepositSearch" component={FixedDepositSearch}/>
-            <Scene key="moneyTransfer" component={MoneyTransfer}/>
-            <Scene key="demand2Fixed" component={Demand2Fixed}/>
-            <Scene key="payment" component={Payment}/>
-            <Scene key="paymentSearch" component={PaymentSearch}/>
-            <Scene key="drawer" component={Drawer} sceneStore={CTSAppStore} initial={true}>
-              <Scene
-                key="tabBar"
-                tabs
-                default="home"
-                tabBarStyle={styles.tabBarStyle}
-                tabBarSelectedItemStyle={styles.tabBarSelectedItemStyle}
-              >
-                <Scene key="home" schema="tab" initial={true} component={Home} title={TAB_TITLE_HOME} hideNavBar={true}
-                       icon={TabIcon}/>
-                <Scene key="financial" schema="tab" component={Financial} title={TAB_TITLE_FINANCIAL} hideNavBar={true}
-                       icon={TabIcon}/>
-                <Scene key="order" schema="tab" component={Order} title={TAB_TITLE_ORDER} hideNavBar={true}
-                       icon={TabIcon}/>
-                <Scene key="mine" schema="tab" component={Mine} title={TAB_TITLE_MINE} hideNavBar={true}
-                       icon={TabIcon}/>
+      );
+    } else {
+      return (
+        <View style={{flex: 1}}>
+          <Router hideNavBar={true} store={CTSAppStore} sceneStyle={{backgroundColor: '#F7F7F7'}}>
+            <Scene key="root" hideNavBar={true}>
+              <Scene key="productDetail" component={ProductDetail}/>
+              <Scene key="accountSummary" component={AccountSummary} title="账户查询"/>
+              <Scene key="demandDepositSearch" component={DemandDepositSearch}/>
+              <Scene key="fixedDepositSearch" component={FixedDepositSearch}/>
+              <Scene key="moneyTransfer" component={MoneyTransfer}/>
+              <Scene key="demand2Fixed" component={Demand2Fixed}/>
+              <Scene key="payment" component={Payment}/>
+              <Scene key="paymentSearch" component={PaymentSearch}/>
+              <Scene key="drawer" component={Drawer} sceneStore={CTSAppStore} initial={true}>
+                <Scene
+                  key="tabBar"
+                  tabs
+                  default="home"
+                  tabBarStyle={styles.tabBarStyle}
+                  tabBarSelectedItemStyle={styles.tabBarSelectedItemStyle}
+                >
+                  <Scene key="home" schema="tab" initial={true} component={Home} title={TAB_TITLE_HOME}
+                         hideNavBar={true}
+                         icon={TabIcon}/>
+                  <Scene key="financial" schema="tab" component={Financial} title={TAB_TITLE_FINANCIAL}
+                         hideNavBar={true}
+                         icon={TabIcon}/>
+                  <Scene key="order" schema="tab" component={Order} title={TAB_TITLE_ORDER} hideNavBar={true}
+                         icon={TabIcon}/>
+                  <Scene key="mine" schema="tab" component={Mine} title={TAB_TITLE_MINE} hideNavBar={true}
+                         icon={TabIcon}/>
+                </Scene>
               </Scene>
             </Scene>
-          </Scene>
-        </Router>
-        <ModalBox style={[styles.modal]} swipeToClose={false} position={"center"} ref={"downloadBox"}>
-          <View>
-            <Text>{this.state.syncMessage}</Text>
-            {this.state.progress && (
-              <Text>{this.state.progress.receivedBytes} / {this.state.progress.totalBytes}</Text>)}
-          </View>
-        </ModalBox>
-      </View>
-    );
+          </Router>
+        </View>
+      );
+    }
   }
-}
 
+  //animate() {
+  //  let downloadProgress = 0;
+  //  this.setState({ downloadProgress });
+  //  setTimeout(() => {
+  //    setInterval(() => {
+  //      downloadProgress += 5;
+  //      if (downloadProgress > 100) {
+  //        downloadProgress = 100;
+  //      }
+  //      this.setState({ downloadProgress });
+  //    }, 500);
+  //  }, 1500);
+  //}
+}
 export default Application;
