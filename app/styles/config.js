@@ -32,8 +32,9 @@ export const config = {
   tabBgColor: 'gray', // tab背景色
 
   /** 文字变量*/
-  lgSize: px(30),
-  mdSize: px(20),
-  smSize: px(16),
-  xsSize: px(12)
+  fontSize30: px(30),
+  fontSize25: px(25),
+  fontSize20: px(20),
+  fontSize16: px(16),
+  fontSize12: px(12)
 };
