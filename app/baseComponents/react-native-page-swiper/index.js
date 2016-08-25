@@ -61,6 +61,15 @@ export default class Swiper extends Component {
         this.state.scrollValue.setValue(offsetX);
       }
     });
+
+    // start autoplay
+    if (this.props.autoPlay) {
+      this.startAutoPlay();
+    }
+  }
+
+  componentWillUnmount() {
+    this.stopAutoPlay();
   }
 
   goToPage(pageNumber) {
@@ -115,6 +124,26 @@ export default class Swiper extends Component {
         style: { position: 'absolute', bottom: 3, width: this.state.viewWidth }
       })
     );
+  }
+
+  startAutoPlay() {
+    const me = this;
+    me.autoPlayTimer = setInterval(() => {
+      let pageNumber = this.state.index;
+      const pageCount = this.props.children.length;
+      if (pageNumber == pageCount - 1) {
+        pageNumber = 0;
+      } else {
+        pageNumber += 1;
+      }
+      me.goToPage(pageNumber);
+    }, this.props.duration || 5000);
+  }
+
+  stopAutoPlay() {
+    if (this.autoPlayTimer) {
+      clearInterval(this.autoPlayTimer);
+    }
   }
 }
 Swiper.propTypes = {

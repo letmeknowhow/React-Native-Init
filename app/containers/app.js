@@ -144,13 +144,29 @@ class Application extends Component {
         }
       },
       ({ receivedBytes, totalBytes, }) => {
-        this.setState({downloadProgress: receivedBytes / totalBytes * 100});
+        this.setState({downloadProgress: receivedBytes / totalBytes});
       }
     );
+
+    //测试升级bundle文件界面
+    //this.refs.modal.open();
+    //this.animate();
   }
 
   render() {
     if (this.state.showDownloadingModal) {
+      let progressTool;
+      if (Platform.OS === 'ios') {
+        progressTool = (<Progress.Circle
+          style={styles.progress}
+          size={80}
+          showsText={true}
+          progress={parseInt(this.state.downloadProgress, 10)}
+        />);
+      } else {
+        progressTool = (<Progress.Bar progress={parseInt(this.state.downloadProgress, 10)} width={100} />);
+      }
+
       return (
           <View style={{flex: 1}}>
             <Modal style={[styles.modal, styles.modal2]} backdrop={false} ref={"modal"} swipeToClose={false}>
@@ -161,12 +177,7 @@ class Application extends Component {
                   </Text> :
                   <View style={{flex: 1, alignSelf: 'stretch', alignItems: 'center', justifyContent: 'center', padding: 20}}>
                     <Text style={{textAlign: 'center', marginBottom: 15, fontSize: 15 }}>下载更新包...</Text>
-                    <Progress.Circle
-                      style={styles.progress}
-                      size={80}
-                      showsText={true}
-                      progress={parseInt(this.state.downloadProgress, 10) / 100}
-                    />
+                    {progressTool}
                   </View>
                 }
               </View>
@@ -213,14 +224,14 @@ class Application extends Component {
     }
   }
 
+  //测试bundle升级界面
   //animate() {
   //  let downloadProgress = 0;
-  //  this.setState({ downloadProgress });
   //  setTimeout(() => {
   //    setInterval(() => {
-  //      downloadProgress += 5;
-  //      if (downloadProgress > 100) {
-  //        downloadProgress = 100;
+  //      downloadProgress += 0.05;
+  //      if (downloadProgress > 1) {
+  //        downloadProgress = 1;
   //      }
   //      this.setState({ downloadProgress });
   //    }, 500);

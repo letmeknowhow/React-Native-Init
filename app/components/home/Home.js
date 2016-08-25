@@ -102,7 +102,7 @@ export default class Home extends Component {
               style={styles.banner}
               source={store.home.banner.bannerSource}
               height={140}
-              autoPlay={false}
+              autoPlay={true}
             />
             <PageSwiper style={styles.wrapper}>
               <GridView style={{flex: 1}}
