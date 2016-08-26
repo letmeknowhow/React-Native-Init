@@ -9,6 +9,14 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Platform, Text, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
+//style
+import NativeTachyons from 'react-native-style-tachyons';
+import {styles as s} from 'react-native-style-tachyons';
+NativeTachyons.build({
+  /* REM parameter it optional, default is 16 */
+  rem: deviceWidth > 340 ? 12 : 10
+}, StyleSheet);
+
 import Banner from '../../baseComponents/Banner';
 import Button from '../../baseComponents/Button';
 import CategoryTitle from '../CategoryTitle';
@@ -20,7 +28,7 @@ import PageSwiper from '../../baseComponents/react-native-page-swiper/index';
 import {observer} from 'mobx-react/native';
 
 const MOCKDATA_ICON1 = [
-  {name: '账户查询', icon: require('../../../assets/icons/zhcx.png')},
+  {name: '账户查询cp', icon: require('../../../assets/icons/zhcx.png')},
   {name: '跨行转账', icon: require('../../../assets/icons/khzz.png')},
   {name: '卡卡转账', icon: require('../../../assets/icons/kkzz.png')},
   {name: '生活缴费', icon: require('../../../assets/icons/shjf.png')},
@@ -191,11 +199,11 @@ export default class Home extends Component {
             <Text style={[styles.nestedText2, bgColor]}>{item.category}</Text>
           </Image>
           <View style={{flex: 1, marginHorizontal: 10}}>
-            <Text style={{fontWeight: '400', fontSize: 13}}>{item.title}</Text>
-            <Text style={{fontWeight: '200', fontSize: 12}}>{item.text}</Text>
+            <Text style={[s.fw7, s.f5]}>{item.title}</Text>
+            <Text style={[s.f6]}>{item.text}</Text>
             <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between'}}>
-              <Text style={{fontSize: 12, fontWeight: '200'}}>{`出发地: ${item.starting}`}</Text>
-              <Text style={{fontSize: 16, color: 'red'}}>{item.price}</Text>
+              <Text style={[s.f5]}>{`出发地: ${item.starting}`}</Text>
+              <Text style={[{color: 'red'}, s.f4]}>{item.price}</Text>
             </View>
           </View>
         </TouchableOpacity>

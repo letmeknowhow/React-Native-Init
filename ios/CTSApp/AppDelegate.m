@@ -21,7 +21,10 @@
 
   
 #ifdef DEBUG
+  //在模拟器运行
     jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+  //在真机运行
+//    jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #else
     jsCodeLocation = [CodePush bundleURL];
 #endif

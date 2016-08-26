@@ -6,7 +6,18 @@
  */
 import React, { Component } from 'react';
 
-import { View, Image, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet, Platform, Dimensions } from 'react-native';
+
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+
+//style
+import NativeTachyons from 'react-native-style-tachyons';
+import {styles as s} from 'react-native-style-tachyons';
+NativeTachyons.build({
+  /* REM parameter it optional, default is 16 */
+  rem: deviceWidth > 340 ? 12 : 10
+}, StyleSheet);
 
 const logo = require('../../assets/logo_text.png');
 const myPortrait = require('../../assets/icons/config.png');
@@ -50,7 +61,7 @@ export default class SceneHeader extends Component {
   render() {
     const item = this.props.title ?
       (<View style={[styles.items, {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
-        <Text style={[{fontSize: 16}]}>{this.props.title}</Text>
+        <Text style={[s.f3]}>{this.props.title}</Text>
       </View>)
       : (<Image style={[styles.items, {resizeMode: Image.resizeMode.contain}]} source={logo}/>);
     return (

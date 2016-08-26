@@ -1,6 +1,17 @@
 # React Native 版本
 0.30.0
 
+
+#### 主要第三方模块
+
+| 模块   |      说明
+|----------|:-------------:|
+| [react-native-code-push](https://github.com/Microsoft/react-native-code-push) | 热更新支持 ios , android
+| [react-native-mobx](https://github.com/aksonov/react-native-mobx) | 是RN支持观察者模式
+| [react-native-router-flux](https://github.com/qwikly/react-native-router-redux) | 路由组件
+| [react-native-style-tachyons](https://github.com/tachyons-css/react-native-style-tachyons) | 样式组件
+
+
 # 环境配置
 
 #### WebStrom 开发环境配置
@@ -28,7 +39,10 @@
 3. 按下`Commond+R`启动测试
 
 #### 启动本地mock 服务
-**在与后台联调前,需要根据接口文档在文件夹"mockServer/public"中自行创建测试数据**
+1. 在与后台联调前,需要根据接口文档在文件夹"mockServer/public"中自行创建测试数据
+2. 修改"config/global.js"中的"webApiURL"为自己机器的ip地址
+2. 启动mock服务
 ```sh
 ./mock.sh
 ```
+

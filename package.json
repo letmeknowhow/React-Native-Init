@@ -20,7 +20,8 @@
     "react-native-progress": "^3.0.1",
     "react-native-router-flux": "^3.35.0",
     "react-native-side-menu": "^0.20.0",
-    "react-native-simple-store": "^1.0.1"
+    "react-native-simple-store": "^1.0.1",
+    "react-native-style-tachyons": "^2.5.0"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.6",

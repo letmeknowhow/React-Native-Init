@@ -14,7 +14,7 @@ export default {
       name: 'getBanner',
       method: 'get',
       url: global.webApiURL + '/banner.json',
-      desc: 'xxx'
+      desc: '获取banner数据'
     },
     {
       name: 'getRegion2',
