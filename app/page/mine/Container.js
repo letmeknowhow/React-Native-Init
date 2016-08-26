@@ -18,9 +18,9 @@ import React, { Component } from 'react';
 
 import { View, Text, StyleSheet, Platform, ScrollView, Image } from 'react-native';
 const Actions = require('react-native-router-flux').Actions;
-import Button from '../../baseComponents/Button';
-import GridView from '../../baseComponents/GridView';
-import SceneHeader from '../../baseComponents/SceneHeader';
+import Button from '../../component/Button';
+import GridView from '../../component/GridView';
+import SceneHeader from '../../component/SceneHeader';
 
 const styles = StyleSheet.create(
   {

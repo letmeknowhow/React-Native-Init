@@ -14,24 +14,24 @@ import CTSAppStore from '../model';
 import Drawer from './Drawer';
 
 /** 主tab 四页*/
-import Home from '../components/home/Home';
-import Financial from '../components/financial/Container';
-import Order from '../components/order/Container';
-import Mine from '../components/mine/Container';
+import Home from '../page/home/Home';
+import Financial from '../page/financial/Container';
+import Order from '../page/travel/Container';
+import Mine from '../page/mine/Container';
 
-import ProductDetail from '../components/product/ProductDetail';
+import ProductDetail from '../page/product/ProductDetail';
 
 //账户总览
-import AccountSummary from '../components/account/AccountSummary';
-import DemandDepositSearch from '../components/account/DemandDepositSearch';
-import FixedDepositSearch from '../components/account/FixedDepositSearch';
-import MoneyTransfer from '../components/account/MoneyTransfer';
+import AccountSummary from '../page/account/AccountSummary';
+import DemandDepositSearch from '../page/account/DemandDepositSearch';
+import FixedDepositSearch from '../page/account/FixedDepositSearch';
+import MoneyTransfer from '../page/account/MoneyTransfer';
 
 //定期转活期
-import Demand2Fixed from '../components/account/Demand2Fixed';
+import Demand2Fixed from '../page/account/Demand2Fixed';
 //缴费
-import Payment from '../components/Payment';
-import PaymentSearch from '../components/PaymentSearch';
+import Payment from '../page/Payment';
+import PaymentSearch from '../page/PaymentSearch';
 
 const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({

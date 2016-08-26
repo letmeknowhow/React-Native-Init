@@ -1,8 +1,16 @@
-'use strict';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import Dot from './dot';
+
+const styles = StyleSheet.create({
+  dots: {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center'
+  }
+});
 
 export default class Dots extends Component {
 
@@ -33,11 +41,3 @@ Dots.defaultProps = {
   total: 0,
   active: -1
 };
-const styles = StyleSheet.create({
-  dots: {
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center'
-  }
-});

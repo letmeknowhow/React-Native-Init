@@ -24,8 +24,8 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from 'rea
 
 import codePush from 'react-native-code-push';
 
-import ButtonList from '../components/ButtonList';
-import ModalBox from '../baseComponents/ModalBox';
+import ButtonList from '../page/ButtonList';
+import ModalBox from '../component/ModalBox';
 const Actions = require('react-native-router-flux').Actions;
 
 const window = Dimensions.get('window');

@@ -17,18 +17,18 @@ NativeTachyons.build({
   rem: deviceWidth > 340 ? 12 : 10
 }, StyleSheet);
 
-import Banner from '../../baseComponents/Banner';
-import Button from '../../baseComponents/Button';
+import Banner from '../../component/Banner';
+import Button from '../../component/Button';
 import CategoryTitle from '../CategoryTitle';
-import GridView from '../../baseComponents/GridView';
+import GridView from '../../component/GridView';
 const Actions = require('react-native-router-flux').Actions;
-import SceneHeader from '../../baseComponents/SceneHeader';
+import SceneHeader from '../../component/SceneHeader';
 
-import PageSwiper from '../../baseComponents/react-native-page-swiper/index';
+import PageSwiper from '../../component/react-native-page-swiper/index';
 import {observer} from 'mobx-react/native';
 
 const MOCKDATA_ICON1 = [
-  {name: '账户查询cp', icon: require('../../../assets/icons/zhcx.png')},
+  {name: '账户查询', icon: require('../../../assets/icons/zhcx.png')},
   {name: '跨行转账', icon: require('../../../assets/icons/khzz.png')},
   {name: '卡卡转账', icon: require('../../../assets/icons/kkzz.png')},
   {name: '生活缴费', icon: require('../../../assets/icons/shjf.png')},

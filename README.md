@@ -2,7 +2,7 @@
 0.30.0
 
 
-#### 主要第三方模块
+# 主要第三方模块
 
 | 模块   |      说明
 |----------|:-------------:|
@@ -11,6 +11,8 @@
 | [react-native-router-flux](https://github.com/qwikly/react-native-router-redux) | 路由组件
 | [react-native-style-tachyons](https://github.com/tachyons-css/react-native-style-tachyons) | 样式组件
 
+### 更多组件
+https://js.coach/react-native
 
 # 环境配置
 
@@ -20,7 +22,7 @@
 3. Javascript -> Libray -> ECMAScript 6 勾选
 
 #### Android环境配置
-请参考 http://reactnative.cn/docs/0.31/android-setup.html#content
+请参考 http://reactnative.cn/docs/0.30/android-setup.html#content
 
 - 安卓模拟器 `Genymotion, 不需要安装android studio`
 

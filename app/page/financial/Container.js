@@ -89,15 +89,15 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Platform, Text, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
-import Banner from '../../baseComponents/Banner';
-import Button from '../../baseComponents/Button';
+import Banner from '../../component/Banner';
+import Button from '../../component/Button';
 import CategoryTitle from '../CategoryTitle';
-import GridView from '../../baseComponents/GridView';
+import GridView from '../../component/GridView';
 import ButtonList from '../ButtonList';
-import SceneHeader from '../../baseComponents/SceneHeader';
+import SceneHeader from '../../component/SceneHeader';
 const Actions = require('react-native-router-flux').Actions;
 
-import PageSwiper from '../../baseComponents/react-native-page-swiper/index';
+import PageSwiper from '../../component/react-native-page-swiper/index';
 
 const MOCKDATA_ICON1 = [
   {name: '我的资产', icon: require('../../../assets/icons/zhcx.png')},

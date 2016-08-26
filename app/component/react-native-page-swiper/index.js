@@ -1,6 +1,14 @@
-'use strict';
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+let _extends = Object.assign || function (target) {
+  for (let i = 1; i < arguments.length; i++) {
+    let source = arguments[i];
+    for (let key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target;
+};
 import React, { Component } from 'react';
 import { Animated, Dimensions, PanResponder, View } from 'react-native';
 
@@ -74,27 +82,31 @@ export default class Swiper extends Component {
 
   goToPage(pageNumber) {
     // Don't scroll outside the bounds of the screens
-    pageNumber = Math.max(0, Math.min(pageNumber, this.props.children.length - 1));
+    let pageNo = Math.max(0, Math.min(pageNumber, this.props.children.length - 1));
     this.setState({
-      index: pageNumber
+      index: pageNo
     });
 
-    Animated.spring(this.state.scrollValue, { toValue: pageNumber, friction: this.props.springFriction, tension: this.props.springTension }).start();
+    Animated.spring(this.state.scrollValue, {
+      toValue: pageNo,
+      friction: this.props.springFriction,
+      tension: this.props.springTension
+    }).start();
 
-    this.props.onPageChange(pageNumber);
+    this.props.onPageChange(pageNo);
   }
 
   handleLayout(event) {
     const { width } = event.nativeEvent.layout;
 
     if (width) {
-      this.setState({ viewWidth: width });
+      this.setState({viewWidth: width});
     }
   }
 
   render() {
     const scenes = React.Children.map(this.props.children, child => {
-      return React.cloneElement(child, { style: [child.props.style, { flex: 1 }] });
+      return React.cloneElement(child, {style: [child.props.style, {flex: 1}]});
     });
 
     const translateX = this.state.scrollValue.interpolate({
@@ -109,11 +121,11 @@ export default class Swiper extends Component {
 
     return React.createElement(
       View,
-      { style: { flex: 1, overflow: "hidden" }, onLayout: this.handleLayout.bind(this) },
+      {style: {flex: 1, overflow: 'hidden'}, onLayout: this.handleLayout.bind(this)},
       React.createElement(
         Animated.View,
         _extends({}, this._panResponder.panHandlers, {
-          style: [sceneContainerStyle, { transform: [{ translateX }] }]
+          style: [sceneContainerStyle, {transform: [{translateX}]}]
         }),
         scenes
       ),
@@ -121,7 +133,7 @@ export default class Swiper extends Component {
         active: this.state.index,
         activeColor: this.props.activeDotColor,
         total: this.props.children.length,
-        style: { position: 'absolute', bottom: 3, width: this.state.viewWidth }
+        style: {position: 'absolute', bottom: 3, width: this.state.viewWidth}
       })
     );
   }
@@ -158,6 +170,7 @@ Swiper.defaultProps = {
   index: 0,
   pager: true,
   threshold: 25,
-  onPageChange: () => {},
+  onPageChange: () => {
+  },
   activeDotColor: 'blue'
 };

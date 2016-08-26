@@ -21,7 +21,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 const Actions = require('react-native-router-flux').Actions;
 import ButtonList from '../ButtonList';
-import SceneHeader from '../../baseComponents/SceneHeader';
+import SceneHeader from '../../component/SceneHeader';
 
 const styles = StyleSheet.create(
   {
