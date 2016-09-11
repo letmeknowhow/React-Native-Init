@@ -8,27 +8,24 @@
 function makeStyles(scaler) {
   return {
     calendar: {
-      height: 320 * scaler,
+      height: 390 * scaler,
       marginTop: 10 * scaler
     },
     dayWrapper: {
       width: 50 * scaler,
-      height: 40 * scaler,
-      backgroundColor: 'rgba(0,0,0,0.0)'
+      height: 50 * scaler,
+      backgroundColor: '#ffffff',
+      margin: 1
     },
 
     dayButton: {
       width: 50 * scaler,
-      height: 40 * scaler,
+      height: 50 * scaler,
       alignSelf: 'center'
     },
 
     dayButtonSelected: {
-      width: 30 * scaler,
-      height: 30 * scaler,
-      borderRadius: 15 * scaler,
       backgroundColor: '#5ce600',
-      alignSelf: 'center'
     },
 
     dayLabel: {
@@ -36,6 +33,13 @@ function makeStyles(scaler) {
       color: '#000',
       marginTop: 6 * scaler,
       alignSelf: 'center'
+    },
+
+    dateCommentLabel: {
+      fontSize: 12 * scaler,
+      color: 'red',
+      marginTop: 6 * scaler,
+      alignSelf: 'flex-end'
     },
 
     dayLabelsWrapper: {

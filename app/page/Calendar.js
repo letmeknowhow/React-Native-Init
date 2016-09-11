@@ -4,6 +4,29 @@
  *  Date: 16/9/11.
  *  Description:
  */
+const prices = {
+  '2016': {
+    '9': {
+      '11': '￥3000',
+      '12': '￥3100',
+      '13': '￥3200',
+      '14': '￥3000',
+      '15': '￥3100',
+      '16': '￥3200',
+      '17': '￥3000',
+      '18': '￥3100',
+      '19': '￥3200',
+      '20': '￥3000',
+      '21': '￥3100',
+      '22': '￥3200'
+    },
+    '10': {
+      '1': '￥3000',
+      '2': '￥3100'
+    }
+  }
+};
+
 import React, { Component } from 'react';
 import {
   Dimensions,
@@ -48,6 +71,7 @@ export default class Calendar extends Component {
 
   // 渲染
   render() {
+    let today = new Date();
     return (
       <View>
         <CalendarPicker
@@ -62,6 +86,9 @@ export default class Calendar extends Component {
           selectedDayColor={'#E12518'}
           textStyle={styles.calendarTextStyle}
           selectedDayTextColor={'#FFFFFF'}
+          minDate={new Date()}
+          maxDate={new Date(today.setDate(today.getDate() + 90))}
+          dateComment={prices}
           style={{}} />
 
         <Text style={styles.selectedDate}> Date: { this.state.date.toString() } </Text>

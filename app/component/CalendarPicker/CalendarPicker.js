@@ -18,7 +18,7 @@ import {
   MONTHS,
   MAX_ROWS,
   MAX_COLUMNS,
-  getDaysInMonth
+  getDaysCountInMonth
 } from './Util';
 
 import makeStyles from './makeStyles';
@@ -68,12 +68,6 @@ export default class CalendarPicker extends Component {
     this.onDayChange = this.onDayChange.bind(this);
     this.onDateChange = this.onDateChange.bind(this);
   }
-
-  //getDefaultProps() {
-  //  return {
-  //    onDateChange () {}
-  //  };
-  //},
 
   // Trigger date change if new props are provided.
   // Typically, when selectedDate is changed programmatically.
@@ -145,6 +139,7 @@ export default class CalendarPicker extends Component {
           textStyle={this.props.textStyle}/>
 
         <Days
+          dateComment={this.props.dateComment}
           maxDate={this.props.maxDate}
           minDate={this.props.minDate}
           month={this.state.month}
@@ -158,84 +153,6 @@ export default class CalendarPicker extends Component {
           textStyle={this.props.textStyle}/>
       </View>
     );
-  }
-}
-
-class Day extends Component {
-  static propTypes = {
-    date: React.PropTypes.instanceOf(Date),
-    onDayChange: React.PropTypes.func,
-    maxDate: React.PropTypes.instanceOf(Date),
-    minDate: React.PropTypes.instanceOf(Date),
-    selected: React.PropTypes.bool,
-    day: React.PropTypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.string
-    ]).isRequired,
-    screenWidth: React.PropTypes.number,
-    startFromMonday: React.PropTypes.bool,
-    selectedDayColor: React.PropTypes.string,
-    selectedDayTextColor: React.PropTypes.string,
-    textStyle: Text.propTypes.style
-  };
-  //getDefaultProps () {
-  //  return {
-  //    onDayChange () {}
-  //  };
-  //},
-
-  // 构造
-  constructor(props) {
-    super(props);
-    // 初始状态
-    this.state = {};
-    this.DAY_WIDTH = (this.props.screenWidth - 16) / 7;
-    this.SELECTED_DAY_WIDTH = (this.props.screenWidth - 16) / 7 - 10;
-    this.BORDER_RADIUS = this.SELECTED_DAY_WIDTH / 2;
-  }
-
-  render() {
-    let textStyle = this.props.textStyle;
-    if (this.props.selected) {
-      let selectedDayColorStyle = this.props.selectedDayColor ? {backgroundColor: this.props.selectedDayColor} : {};
-      let selectedDayTextColorStyle = this.props.selectedDayTextColor ? {color: this.props.selectedDayTextColor} : {};
-      return (
-        <View style={styles.dayWrapper}>
-          <View style={[styles.dayButtonSelected, selectedDayColorStyle]}>
-            <TouchableOpacity
-              style={styles.dayButton}
-              onPress={() => this.props.onDayChange(this.props.day) }>
-              <Text style={[styles.dayLabel, textStyle, selectedDayTextColorStyle]}>
-                {this.props.day}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    } else {
-      if (this.props.date < this.props.minDate || this.props.date > this.props.maxDate) {
-        return (
-          <View style={styles.dayWrapper}>
-            <Text style={[styles.dayLabel, textStyle, styles.disabledTextColor]}>
-              {this.props.day}
-            </Text>
-          </View>
-        );
-      }
-      else {
-        return (
-          <View style={styles.dayWrapper}>
-            <TouchableOpacity
-              style={styles.dayButton}
-              onPress={() => this.props.onDayChange(this.props.day) }>
-              <Text style={[styles.dayLabel, textStyle]}>
-                {this.props.day}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        );
-      }
-    }
   }
 }
 
@@ -278,7 +195,7 @@ class Days extends Component {
 
   updateSelectedStates(day) {
     let selectedStates = [];
-    let daysInMonth = getDaysInMonth(this.props.month, this.props.year);
+    let daysInMonth = getDaysCountInMonth(this.props.month, this.props.year);
     let i;
 
     for (i = 1; i <= daysInMonth; i++) {
@@ -318,9 +235,14 @@ class Days extends Component {
 
       for (let j = 0; j < MAX_COLUMNS; j++) { // Day columns
         if (slotsAccumulator >= thisMonthFirstDay.getDay()) {
-          if (currentDay < getDaysInMonth(month, year)) {
+          if (currentDay < getDaysCountInMonth(month, year)) {
+            let dateComment = this.props.dateComment &&
+              this.props.dateComment[year] &&
+              this.props.dateComment[year][month + 1] &&
+              this.props.dateComment[year][month + 1][currentDay + 1] || ' ';
             columns.push(<Day
               key={j}
+              dateComment={dateComment}
               day={currentDay + 1}
               selected={this.state.selectedStates[currentDay]}
               date={new Date(year, month, currentDay + 1)}
@@ -345,7 +267,6 @@ class Days extends Component {
       matrix[i] = [];
       matrix[i].push(<View style={styles.weekRow}>{columns}</View>);
     }
-
     return matrix;
   }
 
@@ -353,6 +274,86 @@ class Days extends Component {
     return <View style={styles.daysWrapper}>{ this.getCalendarDays() }</View>;
   }
 
+}
+
+class Day extends Component {
+  static propTypes = {
+    date: React.PropTypes.instanceOf(Date),
+    onDayChange: React.PropTypes.func,
+    maxDate: React.PropTypes.instanceOf(Date),
+    minDate: React.PropTypes.instanceOf(Date),
+    selected: React.PropTypes.bool,
+    day: React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.string
+    ]).isRequired,
+    screenWidth: React.PropTypes.number,
+    startFromMonday: React.PropTypes.bool,
+    selectedDayColor: React.PropTypes.string,
+    selectedDayTextColor: React.PropTypes.string,
+    textStyle: Text.propTypes.style
+  };
+  //getDefaultProps () {
+  //  return {
+  //    onDayChange () {}
+  //  };
+  //},
+
+  // 构造
+  constructor(props) {
+    super(props);
+    // 初始状态
+    this.state = {};
+    this.DAY_WIDTH = (this.props.screenWidth - 16) / 7;
+    this.SELECTED_DAY_WIDTH = (this.props.screenWidth - 16) / 7 - 10;
+    this.BORDER_RADIUS = this.SELECTED_DAY_WIDTH / 2;
+  }
+
+  render() {
+    const comment = this.props.dateComment;
+    let textStyle = this.props.textStyle;
+    if (this.props.selected) {
+      let selectedDayColorStyle = this.props.selectedDayColor ? {backgroundColor: this.props.selectedDayColor} : {};
+      let selectedDayTextColorStyle = this.props.selectedDayTextColor ? {color: this.props.selectedDayTextColor} : {};
+      return (
+        <View style={[styles.dayWrapper]}>
+            <TouchableOpacity
+              style={[styles.dayButton, styles.dayButtonSelected]}
+              onPress={() => this.props.onDayChange(this.props.day) }>
+              <Text style={[styles.dayLabel, textStyle, selectedDayTextColorStyle]}>
+                {this.props.day}
+              </Text>
+              <Text style={styles.dateCommentLabel}>{comment}</Text>
+            </TouchableOpacity>
+        </View>
+      );
+    } else {
+      if (this.props.date < this.props.minDate || this.props.date > this.props.maxDate) {
+        return (
+          <View style={styles.dayWrapper}>
+            <Text style={[styles.dayLabel, textStyle, styles.disabledTextColor]}>
+              {this.props.day}
+            </Text>
+            <Text style={styles.dateCommentLabel}>{comment}</Text>
+          </View>
+        );
+      }
+      else {
+        return (
+          <View style={styles.dayWrapper}>
+            <TouchableOpacity
+              style={styles.dayButton}
+              onPress={() => this.props.onDayChange(this.props.day) }>
+              <Text style={[styles.dayLabel, textStyle]}>
+                {this.props.day}
+              </Text>
+              <Text style={styles.dateCommentLabel}>{comment}</Text>
+            </TouchableOpacity>
+          </View>
+        );
+      }
+    }
+  }
 }
 
 class WeekDaysLabels extends Component {
