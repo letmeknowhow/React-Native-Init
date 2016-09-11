@@ -15,8 +15,8 @@ module.exports = {
   ],
   MAX_ROWS: 7,
   MAX_COLUMNS: 7,
-  getDaysInMonth: function(month, year) {
-    var lastDayOfMonth = new Date(year, month + 1, 0);
+  getDaysInMonth: (month, year) => {
+    let lastDayOfMonth = new Date(year, month + 1, 0);
     return lastDayOfMonth.getDate();
   }
 };

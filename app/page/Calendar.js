@@ -54,10 +54,10 @@ export default class Calendar extends Component {
           selectedDate={this.state.date}
           onDateChange={this.onDateChange}
           screenWidth={Dimensions.get('window').width}
-          weekdays = {['Mon', 'Tue', 'Wed', 'Th', 'Fri', 'Sat', 'Sun']}
-          months = {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']}
-          nextTitle={'Next'}
-          previousTitle={'Previous'}
+          weekdays = {['一', '二', '三', '四', '五', '六', '日']}
+          months = {['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']}
+          nextTitle={'下月'}
+          previousTitle={'上月'}
           startFromMonday={true}
           selectedDayColor={'#E12518'}
           textStyle={styles.calendarTextStyle}

@@ -28,8 +28,141 @@ const IPHONE6_WIDTH = 375;
 const initialScale = Dimensions.get('window').width / IPHONE6_WIDTH;
 const styles = StyleSheet.create(makeStyles(initialScale));
 
-var Day = React.createClass({
-  propTypes: {
+export default class CalendarPicker extends Component {
+  // 默认属性
+  static defaultProps = {
+    weekdays: WEEKDAYS
+  };
+
+  // 属性类型
+  static propTypes = {
+    maxDate: React.PropTypes.instanceOf(Date),
+    minDate: React.PropTypes.instanceOf(Date),
+    selectedDate: React.PropTypes.instanceOf(Date).isRequired,
+    onDateChange: React.PropTypes.func,
+    screenWidth: React.PropTypes.number,
+    startFromMonday: React.PropTypes.bool,
+    weekdays: React.PropTypes.array,
+    months: React.PropTypes.array,
+    previousTitle: React.PropTypes.string,
+    nextTitle: React.PropTypes.string,
+    selectedDayColor: React.PropTypes.string,
+    selectedDayTextColor: React.PropTypes.string,
+    scaleFactor: React.PropTypes.number,
+    textStyle: Text.propTypes.style
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: this.props.selectedDate,
+      day: this.props.selectedDate.getDate(),
+      month: this.props.selectedDate.getMonth(),
+      year: this.props.selectedDate.getFullYear(),
+      selectedDay: []
+    };
+
+    this.getPrevYear = this.getPrevYear.bind(this);
+    this.getNextYear = this.getNextYear.bind(this);
+    this.onMonthChange = this.onMonthChange.bind(this);
+    this.onDayChange = this.onDayChange.bind(this);
+    this.onDateChange = this.onDateChange.bind(this);
+  }
+
+  //getDefaultProps() {
+  //  return {
+  //    onDateChange () {}
+  //  };
+  //},
+
+  // Trigger date change if new props are provided.
+  // Typically, when selectedDate is changed programmatically.
+  //
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      date: newProps.selectedDate,
+      day: newProps.selectedDate.getDate(),
+      month: newProps.selectedDate.getMonth(),
+      year: newProps.selectedDate.getFullYear()
+    });
+  }
+
+  onDayChange(day) {
+    this.setState({day: day.day}, () => {
+      this.onDateChange();
+    });
+  }
+
+  onMonthChange(month) {
+    this.setState({month}, () => {
+      this.onDateChange();
+    });
+  }
+
+  getNextYear() {
+    this.setState({year: this.state.year + 1}, () => {
+      this.onDateChange();
+    });
+  }
+
+  getPrevYear() {
+    this.setState({year: this.state.year - 1}, () => {
+      this.onDateChange();
+    });
+  }
+
+  onDateChange() {
+    let {
+        day,
+        month,
+        year
+        } = this.state;
+    let date = new Date(year, month, day);
+
+    this.setState({date});
+    this.props.onDateChange(date);
+  }
+
+  render() {
+    return (
+      <View style={styles.calendar}>
+        <HeaderControls
+          maxDate={this.props.maxDate}
+          minDate={this.props.minDate}
+          year={this.state.year}
+          month={this.state.month}
+          onMonthChange={this.onMonthChange}
+          getNextYear={this.getNextYear}
+          getPrevYear={this.getPrevYear}
+          months={this.props.months}
+          previousTitle={this.props.previousTitle}
+          nextTitle={this.props.nextTitle}
+          textStyle={this.props.textStyle}/>
+
+        <WeekDaysLabels
+          screenWidth={this.props.screenWidth}
+          weekdays={this.props.weekdays}
+          textStyle={this.props.textStyle}/>
+
+        <Days
+          maxDate={this.props.maxDate}
+          minDate={this.props.minDate}
+          month={this.state.month}
+          year={this.state.year}
+          date={this.state.date}
+          onDayChange={this.onDayChange}
+          screenWidth={this.props.screenWidth}
+          startFromMonday={this.props.startFromMonday}
+          selectedDayColor={this.props.selectedDayColor}
+          selectedDayTextColor={this.props.selectedDayTextColor}
+          textStyle={this.props.textStyle}/>
+      </View>
+    );
+  }
+}
+
+class Day extends Component {
+  static propTypes = {
     date: React.PropTypes.instanceOf(Date),
     onDayChange: React.PropTypes.func,
     maxDate: React.PropTypes.instanceOf(Date),
@@ -44,25 +177,28 @@ var Day = React.createClass({
     selectedDayColor: React.PropTypes.string,
     selectedDayTextColor: React.PropTypes.string,
     textStyle: Text.propTypes.style
-  },
-  getDefaultProps () {
-    return {
-      onDayChange () {}
-    };
-  },
+  };
+  //getDefaultProps () {
+  //  return {
+  //    onDayChange () {}
+  //  };
+  //},
 
-  getInitialState () {
-    this.DAY_WIDTH = (this.props.screenWidth - 16)/7;
-    this.SELECTED_DAY_WIDTH = (this.props.screenWidth - 16)/7 - 10;
-    this.BORDER_RADIUS = this.SELECTED_DAY_WIDTH/2;
-    return null;
-  },
+  // 构造
+  constructor(props) {
+    super(props);
+    // 初始状态
+    this.state = {};
+    this.DAY_WIDTH = (this.props.screenWidth - 16) / 7;
+    this.SELECTED_DAY_WIDTH = (this.props.screenWidth - 16) / 7 - 10;
+    this.BORDER_RADIUS = this.SELECTED_DAY_WIDTH / 2;
+  }
 
   render() {
-    var textStyle = this.props.textStyle;
+    let textStyle = this.props.textStyle;
     if (this.props.selected) {
-      var selectedDayColorStyle = this.props.selectedDayColor ? {backgroundColor: this.props.selectedDayColor} : {};
-      var selectedDayTextColorStyle = this.props.selectedDayTextColor ? {color: this.props.selectedDayTextColor} : {};
+      let selectedDayColorStyle = this.props.selectedDayColor ? {backgroundColor: this.props.selectedDayColor} : {};
+      let selectedDayTextColorStyle = this.props.selectedDayTextColor ? {color: this.props.selectedDayTextColor} : {};
       return (
         <View style={styles.dayWrapper}>
           <View style={[styles.dayButtonSelected, selectedDayColorStyle]}>
@@ -85,13 +221,13 @@ var Day = React.createClass({
             </Text>
           </View>
         );
-      } 
+      }
       else {
         return (
           <View style={styles.dayWrapper}>
             <TouchableOpacity
-            style={styles.dayButton}
-            onPress={() => this.props.onDayChange(this.props.day) }>
+              style={styles.dayButton}
+              onPress={() => this.props.onDayChange(this.props.day) }>
               <Text style={[styles.dayLabel, textStyle]}>
                 {this.props.day}
               </Text>
@@ -101,10 +237,10 @@ var Day = React.createClass({
       }
     }
   }
-});
+}
 
-var Days = React.createClass({
-  propTypes: {
+class Days extends Component {
+  static propTypes = {
     maxDate: React.PropTypes.instanceOf(Date),
     minDate: React.PropTypes.instanceOf(Date),
     date: React.PropTypes.instanceOf(Date).isRequired,
@@ -114,28 +250,36 @@ var Days = React.createClass({
     selectedDayColor: React.PropTypes.string,
     selectedDayTextColor: React.PropTypes.string,
     textStyle: Text.propTypes.style
-  },
-  getInitialState() {
-    return {
+  };
+
+  // 构造
+  constructor(props) {
+    super(props);
+    // 初始状态
+    this.state = {
       selectedStates: []
     };
-  },
+
+    this.onPressDay = this.onPressDay.bind(this);
+    this.updateSelectedStates = this.updateSelectedStates.bind(this);
+    this.getCalendarDays = this.getCalendarDays.bind(this);
+  }
 
   componentDidMount() {
     this.updateSelectedStates(this.props.date.getDate());
-  },
+  }
 
   // Trigger date change if new props are provided.
   // Typically, when selectedDate is changed programmatically.
   //
-  componentWillReceiveProps: function(newProps) {
+  componentWillReceiveProps(newProps) {
     this.updateSelectedStates(newProps.date.getDate());
-  },
+  }
 
   updateSelectedStates(day) {
-    var selectedStates = [],
-      daysInMonth = getDaysInMonth(this.props.month, this.props.year),
-      i;
+    let selectedStates = [];
+    let daysInMonth = getDaysInMonth(this.props.month, this.props.year);
+    let i;
 
     for (i = 1; i <= daysInMonth; i++) {
       if (i === day) {
@@ -146,56 +290,54 @@ var Days = React.createClass({
     }
 
     this.setState({
-      selectedStates: selectedStates
+      selectedStates
     });
 
-  },
+  }
 
   onPressDay(day) {
     this.updateSelectedStates(day);
-    this.props.onDayChange({day: day});
-  },
+    this.props.onDayChange({day});
+  }
 
   // Not going to touch this one - I'd look at whether there is a more functional
   // way you can do this using something like `range`, `map`, `partition` and such
   // (see underscore.js), or just break it up into steps: first generate the array for
   // data, then map that into the components
   getCalendarDays() {
-    var columns,
-      matrix = [],
-      i,
-      j,
-      month = this.props.month,
-      year = this.props.year,
-      currentDay = 0,
-      thisMonthFirstDay = this.props.startFromMonday ? new Date(year, month, 0) : new Date(year, month, 1),
-      slotsAccumulator = 0;
+    let columns;
+    let matrix = [];
+    let month = this.props.month;
+    let year = this.props.year;
+    let currentDay = 0;
+    let thisMonthFirstDay = this.props.startFromMonday ? new Date(year, month, 0) : new Date(year, month, 1);
+    let slotsAccumulator = 0;
 
-    for (i = 0; i < MAX_ROWS; i++ ) { // Week rows
+    for (let i = 0; i < MAX_ROWS; i++) { // Week rows
       columns = [];
 
-      for (j = 0; j < MAX_COLUMNS; j++) { // Day columns
+      for (let j = 0; j < MAX_COLUMNS; j++) { // Day columns
         if (slotsAccumulator >= thisMonthFirstDay.getDay()) {
           if (currentDay < getDaysInMonth(month, year)) {
             columns.push(<Day
-                      key={j}
-                      day={currentDay+1}
-                      selected={this.state.selectedStates[currentDay]}
-                      date={new Date(year, month, currentDay + 1)}
-                      maxDate={this.props.maxDate}
-                      minDate={this.props.minDate}
-                      onDayChange={this.onPressDay}
-                      screenWidth={this.props.screenWidth}
-                      selectedDayColor={this.props.selectedDayColor}
-                      selectedDayTextColor={this.props.selectedDayTextColor}
-                      textStyle={this.props.textStyle} />);
+              key={j}
+              day={currentDay + 1}
+              selected={this.state.selectedStates[currentDay]}
+              date={new Date(year, month, currentDay + 1)}
+              maxDate={this.props.maxDate}
+              minDate={this.props.minDate}
+              onDayChange={this.onPressDay}
+              screenWidth={this.props.screenWidth}
+              selectedDayColor={this.props.selectedDayColor}
+              selectedDayTextColor={this.props.selectedDayTextColor}
+              textStyle={this.props.textStyle}/>);
             currentDay++;
           }
         } else {
           columns.push(<Day
-                            key={j}
-                            day={''}
-                            screenWidth={this.props.screenWidth}/>);
+            key={j}
+            day={''}
+            screenWidth={this.props.screenWidth}/>);
         }
 
         slotsAccumulator++;
@@ -205,64 +347,81 @@ var Days = React.createClass({
     }
 
     return matrix;
-  },
+  }
 
   render() {
     return <View style={styles.daysWrapper}>{ this.getCalendarDays() }</View>;
   }
 
-});
+}
 
-var WeekDaysLabels = React.createClass({
-  propTypes: {
+class WeekDaysLabels extends Component {
+  static propTypes = {
     screenWidth: React.PropTypes.number,
     textStyle: Text.propTypes.style
-  },
-  getInitialState() {
-    this.DAY_WIDTH = (this.props.screenWidth - 16)/7;
-    return null;
-  },
+  };
+
+  // 构造
+  constructor(props) {
+    super(props);
+    // 初始状态
+    this.state = {};
+    this.DAY_WIDTH = (this.props.screenWidth - 16) / 7;
+  }
+
   render() {
     return (
       <View style={styles.dayLabelsWrapper}>
-        { (this.props.weekdays || WEEKDAYS).map((day, key) => { return <Text key={key} style={[styles.dayLabels, this.props.textStyle]}>{day}</Text>; }) }
+        { (this.props.weekdays || WEEKDAYS).map((day, key) => {
+          return <Text key={key} style={[styles.dayLabels, this.props.textStyle]}>{day}</Text>;
+        }) }
       </View>
     );
   }
-});
+}
 
-var HeaderControls = React.createClass({
-  propTypes: {
+class HeaderControls extends Component {
+  static propTypes = {
     month: React.PropTypes.number.isRequired,
     year: React.PropTypes.number,
     getNextYear: React.PropTypes.func.isRequired,
     getPrevYear: React.PropTypes.func.isRequired,
     onMonthChange: React.PropTypes.func.isRequired,
     textStyle: Text.propTypes.style
-  },
-  getInitialState() {
-    return {
+  };
+
+  // 构造
+  constructor(props) {
+    super(props);
+    // 初始状态
+    this.state = {
       selectedMonth: this.props.month
     };
-  },
+
+    this.getNext = this.getNext.bind(this);
+    this.getPrevious = this.getPrevious.bind(this);
+    this.previousMonthDisabled = this.previousMonthDisabled.bind(this);
+    this.nextMonthDisabled = this.nextMonthDisabled.bind(this);
+    this.nextMonthDisabled = this.nextMonthDisabled.bind(this);
+  }
 
   // Trigger date change if new props are provided.
   // Typically, when selectedDate is changed programmatically.
   //
-  componentWillReceiveProps: function(newProps) {
+  componentWillReceiveProps(newProps) {
     this.setState({
       selectedMonth: newProps.month
     });
-  },
+  }
 
   // Logic seems a bit awkawardly split up between here and the CalendarPicker
   // component, eg: getNextYear is actually modifying the state of the parent,
   // could just let header controls hold all of the logic and have CalendarPicker
   // `onChange` callback fire and update itself on each change
   getNext() {
-    var next = this.state.selectedMonth + 1;
+    let next = this.state.selectedMonth + 1;
     if (next > 11) {
-      this.setState( { selectedMonth: 0 },
+      this.setState({selectedMonth: 0},
         // Run this function as a callback to ensure state is set first
         () => {
           this.props.getNextYear();
@@ -270,18 +429,18 @@ var HeaderControls = React.createClass({
         }
       );
     } else {
-      this.setState({ selectedMonth: next },
+      this.setState({selectedMonth: next},
         () => {
           this.props.onMonthChange(this.state.selectedMonth);
         }
       );
     }
-  },
+  }
 
   getPrevious() {
-    var prev = this.state.selectedMonth - 1;
+    let prev = this.state.selectedMonth - 1;
     if (prev < 0) {
-      this.setState({ selectedMonth: 11},
+      this.setState({selectedMonth: 11},
         // Run this function as a callback to ensure state is set first
         () => {
           this.props.getPrevYear();
@@ -289,35 +448,35 @@ var HeaderControls = React.createClass({
         }
       );
     } else {
-      this.setState({ selectedMonth: prev },
+      this.setState({selectedMonth: prev},
         () => {
           this.props.onMonthChange(this.state.selectedMonth);
         }
       );
     }
-  },
+  }
 
   previousMonthDisabled() {
-    return ( this.props.minDate &&
-             ( this.props.year < this.props.minDate.getFullYear() ||
-               ( this.props.year == this.props.minDate.getFullYear() && this.state.selectedMonth <= this.props.minDate.getMonth() )
-             )
-           );
-  },
+    return (this.props.minDate &&
+      (this.props.year < this.props.minDate.getFullYear() ||
+        (this.props.year == this.props.minDate.getFullYear() && this.state.selectedMonth <= this.props.minDate.getMonth())
+      )
+    );
+  }
 
   nextMonthDisabled() {
-    return ( this.props.maxDate &&
-             ( this.props.year > this.props.maxDate.getFullYear() ||
-               ( this.props.year == this.props.maxDate.getFullYear() && this.state.selectedMonth >= this.props.maxDate.getMonth() )
-             )
-           );
-  },
+    return (this.props.maxDate &&
+      (this.props.year > this.props.maxDate.getFullYear() ||
+        (this.props.year == this.props.maxDate.getFullYear() && this.state.selectedMonth >= this.props.maxDate.getMonth())
+      )
+    );
+  }
 
   render() {
-    var textStyle = this.props.textStyle;
+    let textStyle = this.props.textStyle;
 
-    var previous;
-    if ( this.previousMonthDisabled() ) {
+    let previous;
+    if (this.previousMonthDisabled()) {
       previous = (
         <Text style={[styles.prev, textStyle, styles.disabledTextColor]}>{this.props.previousTitle || 'Previous'}</Text>
       );
@@ -330,8 +489,8 @@ var HeaderControls = React.createClass({
       );
     }
 
-    var next;
-    if ( this.nextMonthDisabled() ) {
+    let next;
+    if (this.nextMonthDisabled()) {
       next = (
         <Text style={[styles.next, textStyle, styles.disabledTextColor]}>{this.props.nextTitle || 'Next'}</Text>
       );
@@ -361,119 +520,4 @@ var HeaderControls = React.createClass({
       </View>
     );
   }
-});
-
-var CalendarPicker = React.createClass({
-  propTypes: {
-    maxDate: React.PropTypes.instanceOf(Date),
-    minDate: React.PropTypes.instanceOf(Date),
-    selectedDate: React.PropTypes.instanceOf(Date).isRequired,
-    onDateChange: React.PropTypes.func,
-    screenWidth: React.PropTypes.number,
-    startFromMonday: React.PropTypes.bool,
-    weekdays: React.PropTypes.array,
-    months: React.PropTypes.array,
-    previousTitle: React.PropTypes.string,
-    nextTitle: React.PropTypes.string,
-    selectedDayColor: React.PropTypes.string,
-    selectedDayTextColor: React.PropTypes.string,
-    scaleFactor: React.PropTypes.number,
-    textStyle: Text.propTypes.style
-  },
-  getDefaultProps() {
-    return {
-      onDateChange () {}
-    };
-  },
-  getInitialState() {
-    if (this.props.scaleFactor !== undefined) {
-      styles = StyleSheet.create(makeStyles(this.props.scaleFactor));
-    }
-    return {
-      date: this.props.selectedDate,
-      day: this.props.selectedDate.getDate(),
-      month: this.props.selectedDate.getMonth(),
-      year: this.props.selectedDate.getFullYear(),
-      selectedDay: []
-    };
-  },
-
-  // Trigger date change if new props are provided.
-  // Typically, when selectedDate is changed programmatically.
-  //
-  componentWillReceiveProps: function(newProps) {
-    this.setState({
-      date:  newProps.selectedDate,
-      day:   newProps.selectedDate.getDate(),
-      month: newProps.selectedDate.getMonth(),
-      year:  newProps.selectedDate.getFullYear()
-    });
-  },
-
-  onDayChange(day) {
-    this.setState({day: day.day}, () => { this.onDateChange(); });
-  },
-
-  onMonthChange(month) {
-    this.setState({month: month}, () => { this.onDateChange(); });
-  },
-
-  getNextYear(){
-    this.setState({year: this.state.year + 1}, () => { this.onDateChange(); });
-  },
-
-  getPrevYear() {
-    this.setState({year: this.state.year - 1}, () => { this.onDateChange(); });
-  },
-
-  onDateChange() {
-    var {
-      day,
-      month,
-      year
-    } = this.state,
-      date = new Date(year, month, day);
-
-    this.setState({date: date});
-    this.props.onDateChange(date);
-  },
-
-  render() {
-    return (
-      <View style={styles.calendar}>
-        <HeaderControls
-          maxDate={this.props.maxDate}
-          minDate={this.props.minDate}
-          year={this.state.year}
-          month={this.state.month}
-          onMonthChange={this.onMonthChange}
-          getNextYear={this.getNextYear}
-          getPrevYear={this.getPrevYear}
-          months={this.props.months}
-          previousTitle={this.props.previousTitle}
-          nextTitle={this.props.nextTitle}
-          textStyle={this.props.textStyle} />
-
-        <WeekDaysLabels
-          screenWidth={this.props.screenWidth}
-          weekdays={this.props.weekdays}
-          textStyle={this.props.textStyle} />
-
-        <Days
-          maxDate={this.props.maxDate}
-          minDate={this.props.minDate}
-          month={this.state.month}
-          year={this.state.year}
-          date={this.state.date}
-          onDayChange={this.onDayChange}
-          screenWidth={this.props.screenWidth}
-          startFromMonday={this.props.startFromMonday}
-          selectedDayColor={this.props.selectedDayColor}
-          selectedDayTextColor={this.props.selectedDayTextColor}
-          textStyle={this.props.textStyle} />
-      </View>
-    );
-  }
-});
-
-module.exports = CalendarPicker;
+}
