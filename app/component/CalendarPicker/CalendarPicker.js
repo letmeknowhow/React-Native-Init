@@ -23,7 +23,7 @@ import {
 
 import makeStyles from './makeStyles';
 
-//The styles in makeStyles are intially scaled to this width
+//以IPhone6的宽度为参考宽度
 const IPHONE6_WIDTH = 375;
 const initialScale = Dimensions.get('window').width / IPHONE6_WIDTH;
 const styles = StyleSheet.create(makeStyles(initialScale));
@@ -69,9 +69,6 @@ export default class CalendarPicker extends Component {
     this.onDateChange = this.onDateChange.bind(this);
   }
 
-  // Trigger date change if new props are provided.
-  // Typically, when selectedDate is changed programmatically.
-  //
   componentWillReceiveProps(newProps) {
     this.setState({
       date: newProps.selectedDate,
@@ -186,9 +183,6 @@ class Days extends Component {
     this.updateSelectedStates(this.props.date.getDate());
   }
 
-  // Trigger date change if new props are provided.
-  // Typically, when selectedDate is changed programmatically.
-  //
   componentWillReceiveProps(newProps) {
     this.updateSelectedStates(newProps.date.getDate());
   }
@@ -217,10 +211,6 @@ class Days extends Component {
     this.props.onDayChange({day});
   }
 
-  // Not going to touch this one - I'd look at whether there is a more functional
-  // way you can do this using something like `range`, `map`, `partition` and such
-  // (see underscore.js), or just break it up into steps: first generate the array for
-  // data, then map that into the components
   getCalendarDays() {
     let columns;
     let matrix = [];
@@ -293,11 +283,6 @@ class Day extends Component {
     selectedDayTextColor: React.PropTypes.string,
     textStyle: Text.propTypes.style
   };
-  //getDefaultProps () {
-  //  return {
-  //    onDayChange () {}
-  //  };
-  //},
 
   // 构造
   constructor(props) {
@@ -367,7 +352,7 @@ class WeekDaysLabels extends Component {
     super(props);
     // 初始状态
     this.state = {};
-    this.DAY_WIDTH = (this.props.screenWidth - 16) / 7;
+    //this.DAY_WIDTH = (this.props.screenWidth - 16) / 7;
   }
 
   render() {
@@ -405,20 +390,11 @@ class HeaderControls extends Component {
     this.nextMonthDisabled = this.nextMonthDisabled.bind(this);
     this.nextMonthDisabled = this.nextMonthDisabled.bind(this);
   }
-
-  // Trigger date change if new props are provided.
-  // Typically, when selectedDate is changed programmatically.
-  //
   componentWillReceiveProps(newProps) {
     this.setState({
       selectedMonth: newProps.month
     });
   }
-
-  // Logic seems a bit awkawardly split up between here and the CalendarPicker
-  // component, eg: getNextYear is actually modifying the state of the parent,
-  // could just let header controls hold all of the logic and have CalendarPicker
-  // `onChange` callback fire and update itself on each change
   getNext() {
     let next = this.state.selectedMonth + 1;
     if (next > 11) {
