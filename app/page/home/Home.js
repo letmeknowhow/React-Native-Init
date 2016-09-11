@@ -35,7 +35,7 @@ const MOCKDATA_ICON1 = [
   {name: '个人中心', icon: require('../../../assets/icons/grzx.png')},
   {name: '行内转账', icon: require('../../../assets/icons/hnzz.png')},
   {name: '活期转定期', icon: require('../../../assets/icons/hqzdq.png')},
-  {name: '投资理财', icon: require('../../../assets/icons/tzlc.png')},
+  {name: '日历', icon: require('../../../assets/icons/tzlc.png')},
 ];
 
 const MOCKDATA_ICON2 = [
@@ -168,6 +168,9 @@ export default class Home extends Component {
         break;
       case '活期转定期':
         Actions.demand2Fixed({data: button});
+        break;
+      case '日历':
+        Actions.calendar({data: button});
         break;
       default:
 

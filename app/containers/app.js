@@ -33,6 +33,8 @@ import Demand2Fixed from '../page/account/Demand2Fixed';
 import Payment from '../page/Payment';
 import PaymentSearch from '../page/PaymentSearch';
 
+import Calendar from '../page/Calendar';
+
 const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   tabBarStyle: {
@@ -197,6 +199,7 @@ class Application extends Component {
               <Scene key="demand2Fixed" component={Demand2Fixed}/>
               <Scene key="payment" component={Payment}/>
               <Scene key="paymentSearch" component={PaymentSearch}/>
+              <Scene key="calendar" component={Calendar}/>
               <Scene key="drawer" component={Drawer} sceneStore={CTSAppStore} initial={true}>
                 <Scene
                   key="tabBar"
