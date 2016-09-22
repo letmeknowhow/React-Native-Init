@@ -195,7 +195,7 @@ class Application extends Component {
               <Scene key="accountSummary" component={AccountSummary} title="账户查询"/>
               <Scene key="demandDepositSearch" component={DemandDepositSearch}/>
               <Scene key="fixedDepositSearch" component={FixedDepositSearch}/>
-              <Scene key="moneyTransfer" component={MoneyTransfer}/>
+
               <Scene key="demand2Fixed" component={Demand2Fixed}/>
               <Scene key="payment" component={Payment}/>
               <Scene key="paymentSearch" component={PaymentSearch}/>
@@ -208,12 +208,15 @@ class Application extends Component {
                   tabBarStyle={styles.tabBarStyle}
                   tabBarSelectedItemStyle={styles.tabBarSelectedItemStyle}
                 >
-                  <Scene key="home" schema="tab" initial={true} component={Home} title={TAB_TITLE_HOME}
+                  <Scene key="home" schema="tab" title={TAB_TITLE_HOME}
                          hideNavBar={true}
-                         icon={TabIcon}/>
-                  <Scene key="financial" schema="tab" component={Financial} title={TAB_TITLE_FINANCIAL}
+                         icon={TabIcon}>
+                    <Scene key="home_1" duration={1} component={Home}/>
+                    <Scene key="moneyTransfer" component={MoneyTransfer}/>
+                  </Scene>
+                  <Scene key="financial" component={Financial} schema="tab" title={TAB_TITLE_FINANCIAL}
                          hideNavBar={true}
-                         icon={TabIcon}/>
+                         icon={TabIcon} />
                   <Scene key="order" schema="tab" component={Order} title={TAB_TITLE_ORDER} hideNavBar={true}
                          icon={TabIcon}/>
                   <Scene key="mine" schema="tab" component={Mine} title={TAB_TITLE_MINE} hideNavBar={true}

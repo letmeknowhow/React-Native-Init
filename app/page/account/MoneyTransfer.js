@@ -86,7 +86,7 @@ export default class MoneyTransfer extends Component {
         <AccountButtonList style={{marginBottom: 10}} buttons={MOCKDATA_1}/>
         <AccountButtonList style={{marginBottom: 10}} buttons={MOCKDATA_2}/>
         <AccountButtonList style={{marginBottom: 10}} buttons={MOCKDATA_3}/>
-        <TouchableOpacity style={styles.searchButton}>
+        <TouchableOpacity style={styles.searchButton} onPress={Actions.home_1}>
           <Text style={{color: '#FFF'}}>下一步</Text>
         </TouchableOpacity>
         <Text style={styles.comment}>说明:</Text>
